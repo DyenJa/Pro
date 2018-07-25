@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.OrderMapper">
+ <!-- 配置一对多映射-->
+<!--<resultMap type="com.neusoft.po.Address" id="address_freelesson_map">
+	<id property="aid"  column="aid"/>
+	<result property="branch" column="branch"/>
+	<result property="address" column="address"/>
+	<result property="tel" column="tel"/>
+	<result property="longtitude" column="longtitude"/>
+	<result property="latitude" column="latitude"/>
+	<collection property="freelistens" ofType="com.neusoft.po.FreeListen" >
+			<id property="id"  column="id"/>
+			<result property="title" column="title"/>
+			<result property="imgUrl" column="imgurl"/>
+			<result property="fdesc" column="fdesc"/>
+			<result property="status" column="status"/>
+			<result property="pubTime" column="pubtime"/>
+			<result property="branchid" column="branchid"/>
+	</collection>
+</resultMap> -->
+
+<!-- 配置多对一映射 -->
+<!--  <resultMap type="com.neusoft.po.FreeListen" id="freelesson_address_map">
+			<id property="id"  column="id"/>
+			<result property="title" column="title"/>
+			<result property="imgUrl" column="imgurl"/>
+			<result property="fdesc" column="fdesc"/>
+			<result property="status" column="status"/>
+			<result property="pubTime" column="pubtime"/>
+			<result property="branchid" column="branchid"/>
+			<association property="address" javaType="com.neusoft.po.Address"  >
+					<id property="aid"  column="aid"/>
+					<result property="branch" column="branch"/>
+					<result property="address" column="address"/>
+					<result property="tel" column="tel"/>
+					<result property="longtitude" column="longtitude"/>
+					<result property="latitude" column="latitude"/>
+			</association>
+</resultMap> -->
+
+	<resultMap type="com.neusoft.po.Sorder" id="order_lesson_map">
+		<id property="oid" column="oid" />
+		<result property="lid" column="lid" />
+		<result property="total" column="total" />
+		<result property="status" column="status" />
+		<result property="orderTime" column="ordertime" />
+		<result property="qid" column="qid" />
+		<result property="transactionId" column="transactionid" />
+		<result property="username" column="username" />
+		<result property="tel" column="tel" />
+		<association property="lesson" javaType="com.neusoft.po.Lesson">
+			<id property="lid" column="lid" />
+			<result property="lname" column="lname" />
+			<result property="lprice" column="lprice" />
+			<result property="imgUrl" column="imgurl" />
+		</association>
+	</resultMap>
+
+	<select id="getOrders" resultMap="order_lesson_map" parameterType="Map">
+		select sorder.*,lname,lprice,imgurl 
+		from sorder left join lesson
+		on sorder.lid = lesson.lid
+		where sorder.qid=#{qid} and tel=#{tel}
+		<if test="status != null and status != '取消和退款'">
+			and status = #{status}
+		</if>
+		<if test="status != null and status == '取消和退款'">
+			and (status = '已取消' or status = '退款中' or status = '已退款')
+		</if>
+		order by oid desc
+		limit #{page.start},#{page.end}
+	</select>
+	
+	<select id="getOrdersCount" resultType="int" parameterType="Map">
+		select count(*)
+		from sorder
+		where 1=1
+		<if test="qid != null">
+			and qid = #{qid}
+		</if>
+		<if test="tel != null">
+			and tel = #{tel}
+		</if>
+		<if test="oid != null">
+			and oid = #{oid}
+		</if>
+		<if test="status != null">
+			and status = #{status}
+		</if>
+		<if test="startDate != null">
+			and ordertime > str_to_date(#{startDate},'%Y-%m-%d') 
+			and ordertime <![CDATA[<]]> str_to_date(#{endDate},'%Y-%m-%d') 
+		</if>
+	</select>
+	
+	<select id="getOrdersPage" resultType="com.neusoft.po.Sorder" parameterType="Map">
+		select *
+		from sorder
+		where 1=1
+		<if test="qid != null">
+			and qid = #{qid}
+		</if>
+		<if test="oid != null">
+			and oid = #{oid}
+		</if>
+		<if test="status != null">
+			and status = #{status}
+		</if>
+		<if test="startDate != null">
+			and ordertime > str_to_date(#{startDate},'%Y-%m-%d')
+			and ordertime <![CDATA[<]]> str_to_date(#{endDate},'%Y-%m-%d')
+		</if>
+		limit #{page.start},#{page.end}
+	</select>
+	
+	<update id="changeRefundStatus" parameterType="int">
+		update sorder 
+		set status = '已退款' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changePaidStatus" parameterType="int">
+		update sorder 
+		set status = '已使用' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changePaidToRefunding" parameterType="int">
+		update sorder 
+		set status = '退款中' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changeUnpaidToCanceled" parameterType="int">
+		update sorder 
+		set status = '已取消' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="changeUnpaidToPaid" parameterType="int">
+		update sorder 
+		set status = '已付款' 
+		where oid = #{oid}
+	</update>
+	
+	<update id="addRating" parameterType="Map">
+		update sorder
+		set rating = #{rating}
+		where oid = #{oid}
+	</update>
+	
+	<select id="getRating" parameterType="int" resultType="float">
+		select rating
+		from sorder
+		where oid = #{oid}
+	</select>
+	
+	<select id="getUidAndLidByOid" parameterType="int" resultType="com.neusoft.vo.RatingItem">
+		select uid, lid
+		from sorder, user
+		where sorder.tel = user.tel and oid = #{oid}
+	</select>
+	
+	<select id="getTotal" parameterType="int" resultType="float">
+		select total
+		from sorder
+		where oid=#{oid}
+	</select>
+</mapper>

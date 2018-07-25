@@ -1,0 +1,131 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{height:500px;width:100%;}
+		#r-result{width:100%; font-size:14px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UHQW9LTezLKzKE5BPcGOwbMtT2O1qRx1"></script>
+	<script type="application/javascript" src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.zoom.js"></script>
+	<script src="../js/mui.previewimage.js"></script>
+	<script>
+	
+		$(function(){
+			//注册提交按钮的点击事件
+			$("#buyreserve").click(function(){
+				var lession_id=getUrlParam("lid");
+				var reserv_id=getUrlParam("id");
+				if(reserv_id!=null&&lession_id==null){
+					window.location.href="reserve.html?id="+reserv_id;//跳到预约界面
+				}
+				if(lession_id!=null&&reserv_id==null){
+					window.location.href="buy.html?lid="+lession_id;//跳到购买界面
+				}
+			});
+			
+		})
+		
+		function init(){
+			var lession_id=getUrlParam("lid");
+			var reserv_id=getUrlParam("id");
+			if(reserv_id!=null&&lession_id==null){
+				$("#buyreserve").text("预约");
+	
+				$.ajax({
+					url:"../../FrontEnd/getFreeListenPosition",
+					type:"get",
+					data:{id:reserv_id},
+					dataType:"json",
+					success:function(result){
+						//alert("NO!");
+						var latitude=result.latitude;
+						var longitude=result.longitude;
+						var latitude=result.latitude;
+						var  desc=result.detail;
+						
+						baidumap(longitude,latitude);
+						$("#detail").html(desc);
+						
+						//alert(longitude,latitude);
+					}
+				});
+			}
+			if(lession_id!=null&&reserv_id==null){
+				$("#buyreserve").text("购买");	
+				$.ajax({
+					url:"../../FrontEnd/getCoursePosition",
+					type:"get",
+					data:{lid:lession_id},
+					dataType:"json",
+					success:function(result){	
+						var longitude=result.longitude;
+						var latitude=result.latitude;
+						var  desc=result.detail;
+						var  phone=result.phone;
+						var  address=result.address;
+						baidumap(longitude,latitude);
+						$("#detail").html(desc);
+						$("#phone").html(phone);
+						$("#address").html(address);
+					}
+				});
+			}
+		}
+		
+		function getUrlParam(name) {
+		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+		    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+		    if (r != null) return unescape(r[2]); return null; // 返回参数值
+		}
+		
+
+		function baidumap(longitude,latitude){
+			// 百度地图API功能
+			var map = new BMap.Map("allmap");
+			map.centerAndZoom(new BMap.Point(longitude,latitude),16);
+			map.enableScrollWheelZoom(true);
+		}
+		</script>
+	<link rel="stylesheet" href="../css/mui.min.css">
+	<link rel="stylesheet" href="../css/course_detail.css">
+	
+	<title>课程详情</title>
+</head>
+<body onload="init()">
+	
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">课程详情</h1>
+		</header>
+	<div id="address_info" >
+		<div style="padding: 0px,0px;">
+			<p align="center">门店地址</p>
+			<div style="background-color:beige">
+				<br>
+				<p id="address" align="center"></p>
+				<p id="phone" align="center"></p>
+				
+			</div>
+		</div>
+		<div id="allmap" style="padding: 0px,0px;height:250px" ></div>
+	</div>
+	<div id="detail" align="center"  style="margin: 10px auto;">
+		<h4 align="bottom" style="margin:10% 10% 1% 10% ;" align="center" >课程详情</h4>
+		<div id="detail"></div>
+	</div>
+	<div id="need" style="width: 100%; height:8% ;">
+			<h5 align="left" style="margin: auto 20px;" ><a href="#">联系我们</a></h5>
+			<button id="buyreserve" class="mui-btn mui-btn-success"  style="margin: auto 20px; float: right; "></button>	
+	</div>
+
+</body>
+</html>

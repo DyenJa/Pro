@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+		<!--<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />-->
+		<style type="text/css">
+			#list {
+				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
+				margin-top: -1px;
+			}
+		</style>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-3.2.0.min.js"></script>
+		<script type="text/javascript" src="js/course_list.js"></script>
+		
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/course_list.css" />
+	
+		
+	</head>
+	<body style="height: 100%;">
+		<p align="center" style="margin-top:5%;margin-bottom:5%;font: '微软雅黑'; font-size: large;color: black;">所有课程</p>
+	
+		<div id="content" class="content" >
+			
+			
+		<div id="slider" class="mui-slider">
+			<div class="mui-slider-group mui-slider-loop">
+				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="img/course2.jpg">
+					</a>
+				</div>
+				<!-- 第一张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/course1.jpg">
+					</a>
+				</div>
+				<!-- 第二张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/course2.jpg">
+					</a>
+				</div>
+				<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="img/course1.jpg">
+					</a>
+				</div>
+			</div>
+			<div class="mui-slider-indicator">
+				<div class="mui-indicator mui-active"></div>
+				<div class="mui-indicator"></div>
+			
+			</div>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				 swipeBack:true //启用右滑关闭功能
+			});
+			var slider = mui("#slider");
+			slider.slider({
+				interval:2000
+			})
+		</script>
+		
+		
+		
+
+		<p align="center">精品课程</p>
+		<div style="width: 100%;">
+			<div style=" float: left; width: 25%;" id="sssss">
+				<ul class="nav">
+					<li>
+						<a style="width: inherit;" href="#">全 部</a>
+					</li>
+					<li>
+						<a style="width: inherit;" href="#">实训中心</a>
+					</li>
+					<li>
+						<a style="width: inherit;" href="#">艺术中心</a>
+					</li>
+					<li>
+						<a style="width: inherit;" href="#">恒大名都</a>
+					</li>
+				</ul>
+			</div>
+			<div style="width: 74%; float: right;" id="all_course">
+				<div id="course1" style="margin: 0px 0 15px 0;">
+					<a href="course_detail.html"><img src="img/course_cover.png" width="100%" height="150px" href="#" /></a>
+				</div>
+				<div id="course2" style="margin: 0px 0 15px 0;">
+					<a href="course_detail.html"><img src="img/course_cover.png" width="100%" height="150px" href="#" /></a>
+				</div>
+
+				<div id="course3" style="margin: 0px 0 15px 0;">
+					<a href="course_detail.html"><img src="img/course_cover.png" width="100%" height="150px" href="#" /></a>
+				</div>
+		
+			</div>
+		</div>
+		</div>
+
+	
+			<span class="blank" style="height:60px;"></span>
+<style type="text/css">
+	.blank
+	{ 
+		clear:both;
+		 overflow:hidden; 
+		 display:block; 
+		 overflow:hidden;
+	}	
+</style>
+	
+	<style type="text/css">		
+		.text-center{text-align:center}
+		.col-xs-3{width: 24%;display: inline-block;}
+		.footnav { width: 100%; position: fixed; border-top: 1px solid #ccc; padding: 5px 0px; bottom: 0px; left: 0px; background: #EFEFF4;}
+		.footnav a { color: #666;}
+		span{
+			display: block;
+		}
+	</style>
+	<div class="footnav">
+	    <div class="col-xs-3 text-center">
+	    	<a href="index.html" >
+	    	<span class="mui-icon mui-icon-home"></span>
+	    	<span>首页</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="#" style="color: #007aff">
+	    	<span class="mui-icon mui-icon-list"></span>
+	    	<span>课程</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center"><a href="more.html">
+	    	<span class="mui-icon mui-icon-pengyouquan"></span>
+	    	<span>发现</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="mine.html" >
+	    	<span class="mui-icon mui-icon-contact mui-icon-icon-contact"></span>
+	    	<span>我的</span>
+	   		</a>
+	    </div>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>底部菜单实现点击切换页面</title>
+		<!--
+      		底部导航栏的实现
+        -->
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			
+			body {
+				margin: 0;
+				font-family: 微软雅黑;
+			}
+			
+			#content {
+				background: linear-gradient(to bottom right);
+			}
+			
+			.menu {
+				display: block;
+				position: fixed;
+				bottom: 0;
+				width: 100%;
+				height: 70px;
+				color: #474747;
+				padding-top: 10px;
+				border-top: 1px solid #eee;
+				background-color: #fff;
+			}
+			
+			.subMenu {
+				width: 25%;
+				float: left;
+				cursor: pointer;
+			}
+			
+			.menu_name {
+				height: 30px;
+				width: 100%;
+				line-height: 30px;
+			}
+			
+			img.menu_img {
+				height: 24px;
+				width: 24px;
+			}
+			
+			img {
+				vertical-align: middle;
+				border: 0;
+			}
+			
+			.active {
+				color: #FFA129;
+			}
+			
+			.text-center {
+				text-align: center
+			}
+		</style>
+		<script src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				font-size: 14px;
+			}
+			
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			
+			.nav li a {
+				display: block;
+				text-indent: 20px;
+				height: 30px;
+				line-height: 30px;
+				width: 120px;
+				background-color: #efefef;
+				margin-bottom: 1px;
+			}
+			
+			.nav li a:hover {
+				background-color: #F60;
+				color: #fff;
+			}
+		</style>
+	</head>
+
+	<body onload="initSize()" onresize="initSize()">
+	
+			
+		
+
+		<p align="center">精品课程</p>
+		<div>
+			<ul class="nav">
+				<li>
+					<a href="#">全 部</a>
+				</li>
+				<li>
+					<a href="#">实训中心</a>
+				</li>
+				<li>
+					<a href="#">艺术中心</a>
+				</li>
+				<li>
+					<a href="#">恒大名都</a>
+				</li>
+			</ul>
+		</div>
+		<!--bottom-->
+		<div id="menu" class="menu">
+			<div id="one" class="subMenu text-center" data-src="buy.html">
+				<img class="menu_img" data-imgname="home" />
+				<div class="menu_name">首页</div>
+			</div>
+			<div id="two" class="subMenu text-center" data-src="buy.html">
+				<img class="menu_img" data-imgname="course" />
+				<div class="menu_name">课程</div>
+			</div>
+			<div id="three" class="subMenu text-center" data-src="buy.html">
+				<img class="menu_img" data-imgname="cart" />
+				<div class="menu_name">发现</div>
+			</div>
+			<div id="four" class="subMenu text-center" data-src="buy.html">
+				<img class="menu_img" data-imgname="mine" />
+				<div class="menu_name">我的</div>
+			</div>
+		</div>
+
+	</body>
+	<script>
+		//$(function () {});
+		$(document).ready(function() {
+			//添加图片
+			$("div .subMenu>img").each(function() {
+				var name = $(this).attr("data-imgname");
+				var src = "img/" + name + ".jpg"
+				//设置img的属性和值。
+				$(this).attr("src", src);
+			});
+
+			//点击事件
+			$("div .subMenu").click(function() {
+				// 取消当前激活状态
+				var $img = $(".active>img");
+				//返回被选元素的属性值
+				var name = $img.attr("data-imgname");
+				var src = "img/" + name + ".jpg";
+				$img.attr("src", src);
+				$(".active").removeClass("active");
+
+				// 添加新状态
+				$(this).addClass("active");
+				//找到所有 div(subMenu) 的子元素(img)
+				$img = $(this).children("img");
+				name = $img.attr("data-imgname");
+				src = "img/" + name + ".jpg";
+				//设置img的属性和值。
+				$img.attr("src", src);
+
+				//content根据点击按钮加载不同的html
+				var page = $(this).attr("data-src");
+				if(page) {
+					$("#content").load("../html/" + page)
+				}
+			});
+
+			// 自动点击第一个菜单
+			$("div .subMenu")[0].click();
+		});
+
+		/*content高度*/
+		function initSize() {
+			var height = $(window).height() - $("header").height() - $("#description").height() - $("#menu").height();
+			$("#content").height(height + "px");
+		}
+	</script>
+
+</html>

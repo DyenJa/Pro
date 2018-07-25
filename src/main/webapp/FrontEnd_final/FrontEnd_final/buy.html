@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link rel="stylesheet" href="css/buy.css">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+	
+		<script type="text/javascript" src="js/mui.min.js" ></script>
+	<script>
+		$(function(){
+			//注册提交按钮的点击事件
+			$("#buy").click(function(){
+				
+
+				alert("OK")
+				window.location.href="course_list.html";//需要跳转的地址
+			});
+		})
+		</script>
+		<title>正在支付</title>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title" style="font-size: large;">购买</h1>
+		</header>
+		<div class="mui-content">
+			<div id="course_info">
+				<h4 align="center">课程名称</h4>
+			<h2 id="course_name" align="center">Java</h2>
+			</div>
+			
+			
+			<p>需要您填写一些信息：</p>
+			<div>
+				<form class="mui-input-group" id="user_info">
+					<div class="mui-input-row">
+						<label>姓名：</label>
+						<input type="text" class="mui-input-clear">
+					</div>
+					<div class="mui-input-row">
+						<label>电话：</label>
+						<input type="text" class="mui-input-clear">
+					</div>
+				
+				</form>
+				<div align="center" style="padding: 10% ;">
+						<button class="mui-btn mui-btn-success" id="buy" style="width: 50%;">￥20.00       立即购买</button>
+				</div>
+			</div>
+	
+		</div>
+	</body>
+</html>

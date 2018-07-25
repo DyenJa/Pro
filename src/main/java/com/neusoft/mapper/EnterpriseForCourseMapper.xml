@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.EnterpriseForCourseMapper">
+	
+		<select id="getBranchIdByBranchName"  parameterType="java.lang.String" resultType="int" >
+		select aid from address where branch=#{branch}
+	</select>
+	
+	<select id="getqidByBranchName" parameterType="java.lang.String" resultType="int" >
+		select qid from address where branch=#{branch}
+	</select>
+	
+	<select id="getAllAddresses"  parameterType="int" resultType="com.neusoft.po.Address" >
+		select * from address where qid=#{qid}
+	</select>
+	
+	<select id="getBranchidBylid" parameterType="int" resultType="int" >
+		SELECT branchid from lesson,lessonbranch
+		where lesson.lid=#{lid} and lesson.lid=lessonbranch.lid 
+	</select>
+	
+	<select id="getBranchNameBylid" parameterType="int" resultType="java.lang.String" >
+		SELECT branch from lesson,lessonbranch,address
+		where lesson.lid=#{lid} and lesson.lid=lessonbranch.lid and lessonbranch.branchid=address.aid
+	</select>
+	
+	<select id="getBranchNameByBranchID" parameterType="int" resultType="java.lang.String" >
+		SELECT branch from address
+		where aid=#{branchid}
+	</select>
+	
+	<select id="getAddressBylid" parameterType="int" resultType="com.neusoft.po.Address" >
+		SELECT address.* from address,lessonbranch
+		where lessonbranch.lid=#{lid} and lessonbranch.branchid=address.aid 
+	</select>
+	
+	<select id="getAllCourseByBranch" parameterType="int" resultType="com.neusoft.po.Lesson" >
+			SELECT lesson.* FROM lesson ,lessonbranch
+			where lesson.lid=lessonbranch.lid and lessonbranch.branchid=#{id};
+	</select>
+	
+	<select id="getSwiperByCategory" parameterType="com.neusoft.po.Swiper" resultType="com.neusoft.po.Swiper" >
+				SELECT * FROM swiper where qid=#{qid} and category=#{category} order by id desc limit 0,4;
+		</select>
+	
+	
+	
+</mapper>

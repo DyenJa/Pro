@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>订单页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../css/app.css">
+	    <link rel="stylesheet" href="../layui/css/layui.css"  media="all">
+		<link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css">
+		<script src="../layui/layui.js"></script>
+		<script src="../layui/lay/modules/layer.js"></script>
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+	<script>
+		//半星效果
+		var mark=2.5;
+		layui.use(['rate'], function(){
+		  var rate = layui.rate;
+		  rate.render({
+		    elem: '#mark'
+		    ,value: 2.5 //初始值
+		    ,half: true //开启半星
+		    ,text:true
+		    ,choose: function(value){
+			    mark=value;
+			  }
+		  });
+		  })
+	</script>
+ 
+		<style>
+			* { touch-action: none; }
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}	
+			.oa-contact-cell.mui-table .mui-table-cell {
+				padding: 11px 0;
+				vertical-align: middle;
+			}
+			.oa-contact-cell {
+				position: relative;
+				margin: -11px 0;
+			}
+			.oa-contact-avatar {
+				width: 75px;
+			}
+			.oa-contact-avatar img {
+				border-radius: 50%;
+			}
+			.oa-contact-content {
+				width: 100%;
+			}
+			.oa-contact-name {
+				margin-right: 20px;
+			}
+			.oa-contact-name, oa-contact-position {
+				float: left;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 215px;
+			}
+			.mui-control-content .mui-loading {
+				margin-top: 50px;
+			}
+			.mui-table-view-cell { 
+				height: 170px ;
+			}
+			#slider {
+				height: 620px;
+			}
+			.mui-slider-group {
+				height: 100%;	
+			}
+			.div-order-num-status {
+				height: 20%;
+			}
+			.span-order-num {
+				float: left;
+			}
+			.span-order-status {
+				float: right;
+			}
+			.div-item {
+
+				background-color:#E3E3E3;
+				height: 60%;
+			}
+			.div-item-img {
+				float: left;
+				width: 26%;
+				height: 100%;
+			}
+			.order-img {
+				height: 100%;;
+			}
+			.div-item-desc {	
+				margin-left: 30%;
+				margin-right: 3%;
+				height: 100%;
+				right: 26%;
+			}
+			.span-product-name {
+				
+			}
+			.span-product-price {
+				float: right;
+			}
+			.div-order-button {
+				margin-top: 0.8%;
+				height: 20%;
+			}
+			.order-btn-left {
+				left: 59%;
+			}
+			.order-btn-right {
+				left: 68%;
+			}
+			.all-order-btn-right {
+				left: 85%;
+			}
+		</style>
+		
+		
+		<script src="../js/mui.min.js"></script>
+		
+		<script>
+			mui.init({
+				swipeBack: false
+			});
+			function getOrders(status){
+				mui.ajax('http://localhost:8080/NeuEduPro/order/getOrders',{
+					data:{
+						tel : '15940471397',
+						qid : 1,
+						status : status
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型	              
+					success:function(data){
+						var li = '';
+						var button = '';
+						if(status == 'all'  || status == 'refund'){
+							button += '<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>';
+						} else if(status == 'unpaid'){
+							button += '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined">付款</button>' +
+							'<button type="button" class="order-btn-right mui-btn mui-btn-primary mui-btn-outlined">取消</button>' ;
+						} else if(status == 'paid'){
+							button += '<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">退款</button>';
+						} else if(status == 'used'){
+							button += '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark">打分</button>' +
+							'<button type="button" class="order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
+						}
+						for(var i=0; i<data.length; i++){
+							li += '<li class="mui-table-view-cell">' +
+									'<div class="div-order-num-status">' +
+										'<span class="span-order-num">订单编号:'+data[i].oid+'</span>' +
+										'<span class="span-order-status">'+data[i].status+'</span>' +
+									'</div>' +
+									'<div class="div-item">' +
+										'<div class="div-item-img">' +
+											'<img class="order-img" src="img/'+data[i].lesson.imgUrl+'"/>' +
+										'</div>' +
+										'<div class="div-item-desc">' +
+											'<span class="span-product-name">'+data[i].lesson.lname+'</span>' +
+											'<span class="span-product-price">￥'+data[i].lesson.lprice+'</span>' +
+										'</div>' +
+									'</div>' +
+									'<div class="div-order-button">' + button +'</div>' +
+								  '</li>';			
+						}
+						if(status == 'all'){
+							document.getElementById("allOrders_ul").innerHTML = li;
+						}
+						else{
+							var html = '<ul class="mui-table-view">' + li + '</ul>';
+							var item;
+							if(status == 'unpaid'){
+								item = document.getElementById('unpaid');
+							} else if(status == 'paid'){
+								item = document.getElementById('paid');
+							} else if(status == 'used'){
+								item = document.getElementById('used');
+							} else if(status == 'refund'){
+								item = document.getElementById('refund');
+							}
+
+							document.getElementById('slider').addEventListener('slide', function(e) {
+								if(item.querySelector('.mui-loading')) {
+									setTimeout(function() {
+										item.querySelector('.mui-scroll').innerHTML = html;
+									}, 500);
+								}
+							});
+						}
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">我的订单</h1>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#allOrders">
+						全部订单
+					</a>
+					<a class="mui-control-item" href="#unpaid">
+						待付款
+					</a>
+					<a class="mui-control-item" href="#paid">
+						已付款
+					</a>
+					<a class="mui-control-item" href="#used">
+						已使用
+					</a>
+					<a class="mui-control-item" href="#refund">
+						取消/退款
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4" style="width: 20%;"></div>
+				<div class="mui-slider-group">
+					<div id="allOrders" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="allOrders_ul">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="unpaid" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="paid" class="mui-slider-item mui-control-content">
+						<div id="scroll3" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="used" class="mui-slider-item mui-control-content">
+						<div id="scroll4" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="refund" class="mui-slider-item mui-control-content">
+						<div id="scroll5" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	
+	<script type="text/javascript">
+		(function($) {
+			$('.mui-scroll-wrapper').scroll({
+				indicators: true //是否显示滚动条
+			});
+
+			getOrders('all');
+			getOrders('unpaid');
+			getOrders('paid');
+			getOrders('used');
+			getOrders('refund');
+			
+			var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+			$('.mui-input-group').on('change', 'input', function() {
+				if(this.checked) {
+					sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+					//force repaint
+					sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+				}
+			});
+		})(mui);
+	</script>
+	
+	<script>
+		$(document).on('click',".mark",function(){
+			
+			var ind= $(".mark").index($(this));
+			var id = $("#used .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			alert(id);
+			layer.open({
+				type:1,
+				title:'给订单打分',
+				area: '250px',
+				content:$("#mark"),
+				btn:['提交','取消'],
+				yes:function(index,layero){
+					alert(mark);
+					$(function(){
+						$.ajax({
+						url:"",
+						data:{id:id,mark:mark},//id为点击的订单的id，mark为打分结果
+						success:function(data){
+						
+						}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+				},
+				btn2:function(index,layero){
+				}
+				
+			});
+			
+		})
+	</script>
+	</body>
+</html>
+<div style="margin-left:10%" id="mark"></div>

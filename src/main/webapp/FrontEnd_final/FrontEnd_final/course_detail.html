@@ -1,0 +1,90 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{height:500px;width:100%;}
+		#r-result{width:100%; font-size:14px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UHQW9LTezLKzKE5BPcGOwbMtT2O1qRx1"></script>
+	<script type="application/javascript" src="js/jquery-3.2.0.min.js"></script>
+		<script src="js/mui.min.js"></script>
+	<script src="js/mui.zoom.js"></script>
+	<script src="js/mui.previewimage.js"></script>
+	<script>
+		$(function(){
+			//注册提交按钮的点击事件
+			$("#buy").click(function(){
+				
+
+
+				window.location.href="buy.html";//需要跳转的地址
+			});
+			
+			$("#reserve").click(function(){
+				
+
+
+				window.location.href="reserve.html";//需要跳转的地址
+			});
+		})
+		</script>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/course_detail.css">
+	
+	<title>课程详情</title>
+</head>
+<body>
+	
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">课程详情</h1>
+		</header>
+	<div id="address_info" style="margin: 0px,0px;">
+		<div style="padding: 0px,0px;">
+			<p align="center">门店地址</p>
+			<div style="background-color:beige">
+				<p id="address" align="center">沈阳市</p>
+				<p id="phone" align="center">110</p>
+			</div>
+		</div>
+		<div id="allmap" style="padding: 0px,0px;"></div>
+	</div>
+	<div id="detail" align="center">
+		<h4 align="bottom" style="margin:10% 10% 1% 10% ;" align="center" >课程详情</h4>
+		<img src="img/course_cover.png" href="course_detail.html"/>
+		<p id="introduction" style="color: #000000;">这是一门介绍JavaWeb网页设计的课程.............................................</p>
+	</div>
+	<div id="need" style="width: 100%; height:8% ;">
+			<h5 align="left" style="margin: auto 20px;" ><a href="#">联系我们</a></h5>
+			<button id="buy" class="mui-btn mui-btn-success"  style="margin: auto 20px; float: right; ">购买</button>	
+			<button id="reserve" class="mui-btn mui-btn-success"  style="margin: auto 20px; float: right; ">预约</button>	
+	</div>
+	<div>
+		
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	var longitude=123.4018929454;
+	var latitude=41.6924913232;
+	map.centerAndZoom(new BMap.Point(longitude,latitude),16);
+	map.enableScrollWheelZoom(true);
+	
+	// 用经纬度设置地图中心点
+	function theLocation(){
+		if(document.getElementById("longitude").value != "" && document.getElementById("latitude").value != ""){
+			map.clearOverlays(); 
+			map.addOverlay(marker);              // 将标注添加到地图中
+			map.panTo(new_point);      
+		}
+	}
+</script>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>订单页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../css/app.css">
+		<link rel="stylesheet" href="../layui/css/layui.css"  media="all">
+		<link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.pullToRefresh.js"></script>
+		<script src="../js/mui.pullToRefresh.material.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../layui/lay/modules/layer.js"></script>
+	    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>	
+		<script>
+			//半星效果
+			var mark=2.5;
+			layui.use(['rate'], function(){
+			  var rate = layui.rate;
+			  rate.render({
+			    elem: '#mark'
+			    ,value: 2.5 //初始值
+			    ,half: true //开启半星
+			    ,text:true
+			    ,choose: function(value){
+				    mark=value;
+				  }
+			  	
+			  });
+			})
+		</script>
+		<style>
+			* { touch-action: none; }
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}	
+			.oa-contact-cell.mui-table .mui-table-cell {
+				padding: 11px 0;
+				vertical-align: middle;
+			}
+			.oa-contact-cell {
+				position: relative;
+				margin: -11px 0;
+			}
+			.oa-contact-avatar {
+				width: 75px;
+			}
+			.oa-contact-avatar img {
+				border-radius: 50%;
+			}
+			.oa-contact-content {
+				width: 100%;
+			}
+			.oa-contact-name {
+				margin-right: 20px;
+			}
+			.oa-contact-name, oa-contact-position {
+				float: left;
+			}
+			.mui-control-content {
+				background-color: white;
+				min-height: 215px;
+			}
+			.mui-control-content .mui-loading {
+				margin-top: 50px;
+			}
+			.mui-table-view-cell { 
+				height: 170px;
+				padding: 6px 8px;
+			}
+			#slider {
+				height: 620px;
+			}
+			.mui-slider-group {
+				height: 100%;	
+			}
+			.div-order-num-status {
+				height: 20%;
+			}
+			.span-order-num {
+				float: left;
+			}
+			.span-order-status {
+				float: right;
+			}
+			.div-item {
+
+				background-color:#E3E3E3;
+				height: 55%;
+			}
+			.div-item-img {
+				float: left;
+				width: 26%;
+				height: 100%;
+			}
+			.order-img {
+				height: 100%;;
+			}
+			.div-item-desc {	
+				margin-left: 30%;
+				margin-right: 3%;
+				height: 100%;
+				right: 26%;
+			}
+			.span-product-name {
+				
+			}
+			.span-product-price {
+				float: right;
+			}
+			.div-order-button {
+				margin-top: 0.8%;
+				height: 20%;
+			}
+			.order-btn-left {
+				left: 59%;
+			}
+			.order-btn-right {
+				left: 68%;
+			}
+			.all-order-btn-right {
+				left: 85%;
+			}
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			.mui-pull-top-tips {
+				position: absolute;
+				top: -20px;
+				left: 50%;
+				margin-left: -25px;
+				width: 40px;
+				height: 40px;
+				border-radius: 100%;
+				z-index: 1;
+			}
+			.mui-bar~.mui-pull-top-tips {
+				top: 24px;
+			}
+			.mui-pull-top-wrapper {
+				width: 42px;
+				height: 42px;
+				display: block;
+				text-align: center;
+				background-color: #efeff4;
+				border: 1px solid #ddd;
+				border-radius: 25px;
+				background-clip: padding-box;
+				box-shadow: 0 4px 10px #bbb;
+				overflow: hidden;
+			}
+			.mui-pull-top-tips.mui-transitioning {
+				-webkit-transition-duration: 200ms;
+				transition-duration: 200ms;
+			}
+			.mui-pull-top-tips .mui-pull-loading {
+				/*-webkit-backface-visibility: hidden;
+				-webkit-transition-duration: 400ms;
+				transition-duration: 400ms;*/
+				
+				margin: 0;
+			}
+			.mui-pull-top-wrapper .mui-icon,
+			.mui-pull-top-wrapper .mui-spinner {
+				margin-top: 7px;
+			}
+			.mui-pull-top-wrapper .mui-icon.mui-reverse {
+				/*-webkit-transform: rotate(180deg) translateZ(0);*/
+			}
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: white;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			.mui-pull-top-canvas {
+				overflow: hidden;
+				background-color: #fafafa;
+				border-radius: 40px;
+				box-shadow: 0 4px 10px #bbb;
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+			}
+			.mui-pull-top-canvas canvas {
+				width: 40px;
+			}
+			#mark {margin-left:10%; display: none}
+			#refund_msg_in {text-align:center; height:30px; line-height:30px; margin-top: 15px; display: none}
+			#pay_msg_in {text-align:center; height:30px; line-height:30px; margin-top: 15px; display: none}
+			#cancel_msg_in {text-align:center; height:30px; line-height:30px; margin-top: 15px; display: none}
+		</style>
+
+		<script>
+			var page_all = 1;
+			var page_unpaid = 1;
+			var page_paid = 1;
+			var page_used = 1;
+			var page_refund = 1;
+			var totalPage_all;
+			var totalPage_unpaid;
+			var totalPage_paid;
+			var totalPage_used;
+			var totalPage_refund;
+			
+			// 修改支付提示框里订单价格
+			function editPayMsgDiv(price){
+				document.getElementById('pay_msg_in').innerHTML = '<span>订单金额：￥'+price+'</span>';
+			}
+			
+			// 查看课程是否已评分
+			function hasRating(id){
+				var rating;
+				mui.ajax(getRootPath()+'/FrontEnd/order/getRating',{
+					async : false,
+					data:{oid : id},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型	              
+					success:function(data){
+						//alert(data);
+						rating = data;
+					}
+				});
+				var has = (rating != null);
+				//alert(has);
+				//return (rating != null)?true:false;
+				return has;
+			}
+			
+			// 初始化页面参数
+			function initPageIdx(){
+				page_all = 1;
+				page_unpaid = 1;
+				page_paid = 1;
+				page_used = 1;
+				page_refund = 1;
+				
+				getTotalPage();
+			}
+			
+			// 初始化订单
+			function initItem(id){
+				var ul_id = id + '_ul';
+				document.getElementById(ul_id).innerHTML = '';
+				loadNextPage(id,'init');
+			}
+			
+			// 根据状态获得相应按钮html
+			function getButtonHTML(status){
+				var button = '';
+				if(status == 'all' || status == 'refund'){
+					button += '<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>';
+				} else if(status == 'unpaid'){
+					button += '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined pay">付款</button>' +
+					'<button type="button" class="order-btn-right mui-btn mui-btn-primary mui-btn-outlined cancel">取消</button>' ;
+				} else if(status == 'paid'){
+					button += '<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined refund">退款</button>';
+				} else if(status == 'used'){
+					button += '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark">打分</button>' +
+								'<button type="button" class="order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
+				}
+				return button;
+			}
+
+			function getRootPath(){
+				//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+				var curWwwPath=window.document.location.href;
+				//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+				var pathName=window.document.location.pathname;
+				var pos=curWwwPath.indexOf(pathName);
+				//获取主机地址，如： http://localhost:8083
+				var localhostPaht=curWwwPath.substring(0,pos);
+				//获取带"/"的项目名，如：/uimcardprj
+				var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+				return(localhostPaht+projectName);
+			}
+			
+			//String path = request.getServletContext().getRealPath("/");
+			//String ppath = new File(path).getParent();
+			//1.3 临时-》目的
+			//File dest = new File(ppath+"/upload",filename);	  
+			
+			// 获得每个状态栏订单的总页数
+			function getTotalPage(){
+				mui.ajax(getRootPath()+'/FrontEnd/order/getTotalPage',{
+					data:{
+						qid : 1,
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型	              
+					success:function(data){
+						totalPage_all = data[0];
+						totalPage_unpaid = data[1];
+						totalPage_paid = data[2];
+						totalPage_used = data[3];
+						totalPage_refund = data[4];
+					}
+				})
+			}
+
+			// 加载下一页
+			function loadNextPage(status,flag){
+				var fragment = document.createDocumentFragment();
+				var ul;
+				var nextPage;
+				var btn = getButtonHTML(status);
+				if(flag=='init'){
+					initPageIdx();
+				}
+				switch(status){
+				case 'all':
+					ul = document.getElementById('allOrders').querySelector('.mui-table-view');
+					nextPage = page_all;
+					break;
+				case 'unpaid':
+					ul = document.getElementById('unpaid').querySelector('.mui-table-view');
+					nextPage = page_unpaid;
+					break;
+				case 'paid':
+					ul = document.getElementById('paid').querySelector('.mui-table-view');
+					nextPage = page_paid;
+					break;
+				case 'used':
+					ul = document.getElementById('used').querySelector('.mui-table-view');
+					nextPage = page_used;
+					//alert(nextPage);
+					break;
+				case 'refund':
+					ul = document.getElementById('refund').querySelector('.mui-table-view');
+					nextPage = page_refund;
+					break;
+				}
+				mui.ajax(getRootPath()+'/FrontEnd/order/getOrders',{
+					data:{qid:1, page:nextPage, status:status} ,
+					async:false,
+					success:function(data){
+						console.log(data);
+						var li = '';
+						for(var i=0;i<data.length;i++){
+							btn = getButtonHTML(status);
+							//alert(btn);
+							if(status == 'used' && hasRating(data[i].oid))
+								btn =  '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark" style="display:none">打分</button>' +
+								'<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
+							
+							var html = '<li class="mui-table-view-cell">' +
+											'<div class="div-order-num-status">' +
+											'<span class="span-order-num">订单编号:'+data[i].oid+'</span>' +
+											'<span class="span-order-status">'+data[i].status+'</span>' +
+										'</div>' +
+										'<div class="div-item">' +
+											'<div class="div-item-img">' +
+												'<img class="order-img" src="/upload/cover/'+data[i].lesson.imgUrl+'"/>' +
+											'</div>' +
+											'<div class="div-item-desc">' +
+												'<span class="span-product-name">'+data[i].lesson.lname+'</span>' +
+												'<span class="span-product-price">￥'+data[i].total+'</span>' +
+											'</div>' +
+										'</div>' +
+										'<div class="div-order-button">' + btn +'</div>' +
+									  '</li>';	
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell';
+							li.innerHTML = html;
+							fragment.appendChild(li);
+						}
+					}
+				})
+				ul.appendChild(fragment);
+				if(status == 'all')
+					page_all++;	
+				else if(status == 'unpaid')
+					page_unpaid++;
+				else if(status == 'paid')
+					page_paid++;
+				else if(status == 'used')
+					page_used++;
+				else if(status == 'refund')
+					page_refund++;
+			}
+			
+			(function($) {
+				//阻尼系数
+				var deceleration = mui.os.ios?0.003:0.0009;
+				$('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration:deceleration
+				});
+				$.ready(function refresh() {
+					//循环初始化所有下拉刷新，上拉加载。
+					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						$(pullRefreshEl).pullToRefresh({
+							up: {
+	//							auto: true,
+								contentrefresh : "玩命加载中...",
+								callback: function() {
+									var self = this;
+									setTimeout(function() {
+										var ul = self.element.querySelector('.mui-table-view');
+										ul.appendChild(createFragment(ul, index, 3));
+										self.endPullUpToRefresh();
+									}, 1000);
+								}
+							}
+						});
+					});
+					var createFragment = function(ul, index, count) {
+						var length = ul.querySelectorAll('li').length;
+						var fragment = document.createDocumentFragment();
+						var li;
+						var url = getRootPath()+'/FrontEnd/order/getOrders';
+						var status;
+						var page;
+						var button;
+						var doit=false;
+
+						if(index==0){
+							status = 'all';
+							page=page_all;
+							if(page<=totalPage_all){
+								//alert(totalPage_all);
+								doit=true;
+							}
+							page_all++;
+						}else if(index==1){
+							page=page_unpaid;
+							status="unpaid";
+							if(page<=totalPage_unpaid){
+								//alert(totalPage_unpaid);
+								doit=true;
+							}
+							page_unpaid++;
+						}else if(index==2){
+							page=page_paid;
+							status="paid";
+							if(page<=totalPage_paid){
+								//alert(totalPage_paid);
+								doit=true;
+							}
+							page_paid++;
+						}else if(index==3){
+							page=page_used;
+							status="used";
+							if(page<=totalPage_used){
+								//alert(totalPage_used);
+								doit=true;
+							}
+							page_used++;
+						}else if(index==4){
+							page=page_refund;
+							status="refund";
+							if(page<=totalPage_refund){
+								//alert(totalPage_refund);
+								doit=true;
+							}
+							page_refund++;
+						}
+						if(doit){
+							mui.ajax(url,{
+								data:{qid:1,page:page,status:status} ,
+								type:"post",
+								async:false,
+								success:function(data){
+									console.log(data);
+									
+									var li = '';
+									
+
+									for(var i=0; i<data.length; i++){
+										button = getButtonHTML(status);
+										if(status == 'used' && hasRating(data[i].oid))
+											button =  '<button type="button" class="order-btn-left mui-btn mui-btn-primary mui-btn-outlined mark" style="display:none">打分</button>' +
+											'<button type="button" class="all-order-btn-right mui-btn mui-btn-primary mui-btn-outlined">查看</button>' ;
+										var html = '<li class="mui-table-view-cell">' +
+														'<div class="div-order-num-status">' +
+														'<span class="span-order-num">订单编号:'+data[i].oid+'</span>' +
+														'<span class="span-order-status">'+data[i].status+'</span>' +
+													'</div>' +
+													'<div class="div-item">' +
+														'<div class="div-item-img">' +
+															'<img class="order-img" src="/upload/cover/'+data[i].lesson.imgUrl+'"/>' +
+														'</div>' +
+														'<div class="div-item-desc">' +
+															'<span class="span-product-name">'+data[i].lesson.lname+'</span>' +
+															'<span class="span-product-price">￥'+data[i].total+'</span>' +
+														'</div>' +
+													'</div>' +
+													'<div class="div-order-button">' + button + '</div>' +
+												  '</li>';	
+										li = document.createElement('li');
+										li.className = 'mui-table-view-cell';
+										li.innerHTML = html;
+										fragment.appendChild(li);
+									}
+									mui.toast("更新成功");
+								}
+							});
+						}else{
+							mui.toast("没有更多了");
+						}
+						return fragment;
+					};
+				});
+			})(mui);
+		</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">我的订单</h1>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider  mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#allOrders">
+						全部订单
+					</a>
+					<a class="mui-control-item" href="#unpaid">
+						待付款
+					</a>
+					<a class="mui-control-item" href="#paid">
+						已付款
+					</a>
+					<a class="mui-control-item" href="#used">
+						已使用
+					</a>
+					<a class="mui-control-item" href="#refund">
+						取消/退款
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4" style="width: 20%;"></div>
+				<div class="mui-slider-group">
+					<div id="allOrders" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="allOrders_ul" style="padding: 6px, 8px;">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="unpaid" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="unpaid_ul">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="paid" class="mui-slider-item mui-control-content">
+						<div id="scroll3" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="paid_ul">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="used" class="mui-slider-item mui-control-content">
+						<div id="scroll4" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="used_ul">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="refund" class="mui-slider-item mui-control-content">
+						<div id="scroll5" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="refund_ul">
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<script type="text/javascript">
+		(function($) {
+			$('.mui-scroll-wrapper').scroll({
+				indicators: true //是否显示滚动条
+			});
+
+			getTotalPage();
+			loadNextPage('all','');
+			loadNextPage('unpaid','');
+			loadNextPage('paid','');
+			loadNextPage('used','');
+			loadNextPage('refund','');
+
+		})(mui);
+	</script>
+	
+	<script type="text/javascript">
+		// 付款按钮的监听事件
+		$(document).on('click',".pay",function(){
+			var obj = document.getElementById("pay_msg_in");
+			   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: block;"
+			var ind= $(".pay").index($(this));
+			var id = $("#unpaid .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			var price;
+			$.ajax({
+				url:getRootPath()+'/FrontEnd/order/getTotal',
+				async:false,
+				data:{oid:id},//id为点击的订单的id
+				success:function(data){
+					price = data;
+				}
+			});
+			editPayMsgDiv(price);
+			//var price = $("#unpaid .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			layer.open({
+				btnAlign: 'c',
+				type:1,
+				title:'消息框',
+				area: '250px',
+				content: $('#pay_msg_out'),
+				btn:['支付','取消'],
+				yes:function(index,layero){
+					$(function(){
+						$.ajax({
+							url:getRootPath()+'/FrontEnd/order/applyForPay',
+							data:{oid:id},//id为点击的订单的id
+							success:function(data){
+								if(data == true){
+									mui.toast('支付成功');
+									initItem('unpaid');
+									initItem('paid');
+								}
+								else
+									mui.toast('支付失败');
+							}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+					var obj = document.getElementById("pay_msg_in");
+					   obj.style.cssText = "display: none;"
+				},
+				btn2:function(index,layero){
+					var obj = document.getElementById("pay_msg_in");
+					   obj.style.cssText = "display: none;"
+				},
+				cancel:function(){
+					var obj = document.getElementById("pay_msg_in");
+					   obj.style.cssText = "display: none;"
+				}
+			});
+		})
+	</script>
+	
+	<script type="text/javascript">
+		// 取消按钮的监听事件
+		$(document).on('click',".cancel",function(){
+			var obj = document.getElementById("cancel_msg_in");
+			   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: block;"
+			var ind= $(".cancel").index($(this));
+			var id = $("#unpaid .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			layer.open({
+				btnAlign: 'c',
+				type:1,
+				title:'消息框',
+				area: '250px',
+				content: $('#cancel_msg_out'),
+				btn:['确认','取消'],
+				yes:function(index,layero){
+					$(function(){
+						$.ajax({
+							url:getRootPath()+'/FrontEnd/order/applyForCancel',
+							data:{oid:id},//id为点击的订单的id
+							success:function(data){
+								if(data == true){
+									mui.toast('取消成功');
+									initItem('unpaid');
+									initItem('refund');
+								}
+								else
+									mui.toast('取消失败');
+							}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+					var obj = document.getElementById("cancel_msg_in");
+					   obj.style.cssText = "display: none;"
+				},
+				btn2:function(index,layero){
+					var obj = document.getElementById("cancel_msg_in");
+					   obj.style.cssText = "display: none;"
+				},
+				cancel:function(){
+					var obj = document.getElementById("cancel_msg_in");
+					   obj.style.cssText = "display: none;"
+				}
+			});
+		})
+	</script>
+	
+	<script type="text/javascript">
+		// 退款按钮的监听事件
+		$(document).on('click',".refund",function(){
+			var obj = document.getElementById("refund_msg_in");
+			   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: block;"
+			
+			var ind= $(".refund").index($(this));
+			var id = $("#paid .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			layer.open({
+				btnAlign: 'c',
+				type:1,
+				title:'消息框',
+				area: '250px',
+				content: $("#refund_msg_out"),
+				btn:['确认','取消'],
+				yes:function(index,layero){
+					$(function(){
+						$.ajax({
+							url:getRootPath()+'/FrontEnd/order/applyForRefund',
+							data:{oid:id},//id为点击的订单的id，mark为打分结果
+							success:function(data){
+								if(data == true){
+									mui.toast('申请成功');
+									initItem('paid');
+									initItem('refund');
+								}
+								else
+									mui.toast('申请失败');
+							}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+					var obj = document.getElementById("refund_msg_in");
+					   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: none;"
+				},
+				btn2:function(index,layero){
+					var obj = document.getElementById("refund_msg_in");
+					   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: 'none;"
+				},
+				cancel:function(){
+					var obj = document.getElementById("refund_msg_in");
+					   obj.style.cssText = "text-align:center; height:30px; line-height:30px; margin-top: 15px; display: none;"
+				}
+			});
+		})
+	</script>
+		
+	<script>
+		// 评分按钮事件监听
+		$(document).on('click',".mark",function(){
+			var obj = document.getElementById('mark');
+			   obj.style.cssText = "text-align: center; display: block"
+			var ind= $(".mark").index($(this));
+			var id = $("#used .span-order-num").eq(ind).html().replace(/\D+/g,"");
+			layer.open({
+				btnAlign: 'c',
+				type:1,
+				title:'给课程打分',
+				area: '250px',
+				content:$("#mark"),
+				btn:['提交','取消'],
+				yes:function(index,layero){
+					//alert(mark);
+					$(function(){
+						$.ajax({
+							url:getRootPath()+'/FrontEnd/order/addRating',
+							data:{oid:id,mark:mark},//id为点击的订单的id，mark为打分结果
+							success:function(data){
+								if(data == true){
+									mui.toast('提交成功');
+									initItem('used');
+								}
+								else
+									mui.toast('提交失败');
+							}
+						})
+					})
+					layer.close(index); //如果设定了yes回调，需进行手工关闭
+					var obj = document.getElementById("mark");
+					   obj.style.cssText = "display:none;"
+				},
+				btn2:function(index,layero){
+					var obj = document.getElementById("mark");
+					   obj.style.cssText = "display:none;"
+				},
+				cancel:function(){
+					var obj = document.getElementById("mark");
+					   obj.style.cssText = "display:none;"
+				}
+			});
+		})
+	</script>
+	<div id="mark"></div>
+	<div id="cancel_msg_out"><div id="cancel_msg_in"><span>您确定要取消吗</span></div></div>
+	<div id="refund_msg_out"><div id="refund_msg_in"><span>您确定要申请退款吗</span></div></div>
+	<div id="pay_msg_out"><div id="pay_msg_in"><span>订单金额：￥</span></div></div>
+	</body>
+</html>

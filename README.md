@@ -1,3 +1,4 @@
 # Pro
 东软五人小组项目
 maven可以使用该项目下的repository
+如果在加入全局变量控制时不成功记得可以重新导入老师的repository

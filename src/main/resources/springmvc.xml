@@ -27,16 +27,14 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
 	<context:component-scan base-package="com.neusoft.control" />
 	
-		<!-- 拦截器的配置：只能拦截处理器路径
-	<mvc:interceptors>
+		<!-- 拦截器的配置：只能拦截处理器路径-->
+	<!-- <mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<mvc:exclude-mapping path="/login.action"/>
-			
+			<mvc:mapping path="/BackEnd/*"/>
+			<mvc:exclude-mapping path="/userinfo/MyUserinfoHandle_Login"/>
 			<bean class="com.neusoft.interceptor.MyInterceptor"></bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
-	  --> 
+	</mvc:interceptors> -->
 	  
 	  <!-- 配置静态资源——html,css,js视频图片 -->
 	  <mvc:default-servlet-handler/>
@@ -46,9 +44,12 @@
 		<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 				<!-- 设置上传文件的最大尺寸为5MB -->
 				<property name="maxUploadSize">
-						<value>5242880</value>
+						<value>52428800</value>
 				</property>
 		</bean>
+		<!-- 配置全局异常处理器 -->
+	  <bean class="com.neusoft.control.GlobalExceptionResolver"></bean>
+		
 </beans>
 
 

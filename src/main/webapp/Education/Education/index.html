@@ -1,0 +1,354 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!-- <script type="application/javascript" src="js/jquery-3.2.0.min.js"></script> -->
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+		<!--<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />-->
+		<style type="text/css">
+			#list {
+				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
+				margin-top: -1px;
+			}
+			#enterprise_img div a img{
+				width:100%;
+				height:200px;
+			}
+		</style>
+		<script src="../js/mui.min.js"></script>
+	</head>
+	<body style="height: 100%;">
+		<p align="center" style="margin-top:5%;margin-bottom:5%;font: '微软雅黑'; font-size: large;color: black;">首页</p>
+	
+		<div id="slider" class="mui-slider" style="height: 80%;">
+			<div class="mui-slider-group mui-slider-loop" id="enterprise_img">
+				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="img/yuantiao.jpg">
+					</a>
+				</div>
+				第一张
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/shuijiao.jpg">
+					</a>
+				</div>
+				第二张
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/muwu.jpg">
+					</a>
+				</div>
+				第三张
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/cbd.jpg">
+					</a>
+				</div>
+				第四张
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/yuantiao.jpg">
+					</a>
+				</div>
+				额外增加的一个节点(循环轮播：最后一个节点是第一张轮播)
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="img/shuijiao.jpg">
+					</a>
+				</div>
+			</div>
+			<div class="mui-slider-indicator" id="enterprise_img_frontController">
+				<div class="mui-indicator mui-active"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+			</div>
+		</div>
+	<!-- 	<script type="text/javascript" charset="utf-8">
+			
+		</script>
+ -->
+
+		<hr />
+		<div class="mui-content" >
+		        <ul class="mui-table-view mui-grid-view mui-grid-9">
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="company.html?qid=1">
+		                    <span class="mui-icon mui-icon-home"></span>
+		                    <div class="mui-media-body">公司简介</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="teachers.html?qid=1">
+		                    <span class="mui-icon mui-icon-person"></span>
+		                    <div class="mui-media-body">师资力量</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="location.html?qid=1">
+		                    <span class="mui-icon mui-icon-location"></span>
+		                    <div class="mui-media-body">学校位置</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;"><a href="#">
+		                    <span class="mui-icon mui-icon-chatbubble"></span>
+		                    <div class="mui-media-body">联系我们</div></a></li>
+		        </ul> 
+		</div>
+		<hr />
+		
+		
+		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="mui-scroll">
+         <a class="mui-control-item mui-active" href="#recommend" >
+                推荐
+            </a>
+            <a class="mui-control-item" href="#lesson" >
+              	精品课课程
+            </a>
+            <a class="mui-control-item" href="#freelisten">
+               	免费试听课
+            </a>
+           <a class="mui-control-item" href="#java">
+               	java
+            </a>
+            <a class="mui-control-item" href="#html5">
+               	HTML5课程
+            </a>
+            <a class="mui-control-item" href="#cpp">
+               	C++
+            </a>
+            <a class="mui-control-item" href="#python">
+               	PYTHON课程
+            </a>
+        </div>
+    </div>
+
+	<div class="mui-content" >
+		<div id="recommend" class="mui-slider-item mui-control-content mui-active">
+		    <ul class="mui-table-view mui-grid-view"  id="rec">
+		      
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="lesson" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="0">
+		      
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="freelisten" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="1">
+		       
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="java" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="2">
+		        
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="html5" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="3">
+		        
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="cpp" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="4">
+		        
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+		
+		<div id="python" class="mui-slider-item mui-control-content ">
+		    <ul class="mui-table-view mui-grid-view" id="5">
+		        
+		    </ul>
+		    <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+		</div>
+	</div>
+<span class="blank" style="height:60px;"></span>
+<style type="text/css">
+	.blank
+	{ 
+		clear:both;
+		 overflow:hidden; 
+		 display:block; 
+		 overflow:hidden;
+	}	
+</style>
+	
+	<style type="text/css">		
+		.text-center{text-align:center}
+		.col-xs-3{width: 24%;display: inline-block;}
+		.footnav { width: 100%; position: fixed; border-top: 1px solid #ccc; padding: 5px 0px; bottom: 0px; left: 0px; background: #EFEFF4;}
+		.footnav a { color: #666;}
+		span{
+			display: block;
+		}
+	</style>
+	<div class="footnav">
+	    <div class="col-xs-3 text-center">
+	    	<a href="#" style="color: #007aff">
+	    	<span class="mui-icon mui-icon-home"></span>
+	    	<span>首页</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="course_list.html">
+	    	<span class="mui-icon mui-icon-list"></span>
+	    	<span>课程</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="more.html">
+	    	<span class="mui-icon mui-icon-pengyouquan"></span>
+	    	<span>发现</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="mine.html" >
+	    	<span class="mui-icon mui-icon-contact mui-icon-icon-contact"></span>
+	    	<span>我的</span>
+	   		</a>
+	    </div>
+	</div>
+	
+	<script>
+	$(function(){
+		
+		var paraString = location.search;
+		//alert(paraString.substring(5,6));
+	
+		
+		$.ajax({
+			url:"../../test/Handler_frontEndFindEnterpriseByQid",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				console.log(data);				
+				var cont = document.getElementById("enterprise_img_frontController");
+				var img = document.getElementById("enterprise_img");
+				cont.innerHTML = "";
+				img.innerHTML = "";
+				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[data.swiperList.length-1].imgurl+'"/></a></div>';
+				for(var i = 0; i< data.swiperList.length; i++){
+					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>';
+					if(i==0){
+						//img.innerHTML+='<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>'
+						cont.innerHTML += '<div class="mui-indicator mui-active"></div>';
+					}
+					else{
+						//img.innerHTML+='<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>'
+						cont.innerHTML  += '<div class="mui-indicator"></div>';
+					}
+				}
+				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[0].imgurl+'"/></a></div>';
+			}
+		});
+		mui.init({
+			 swipeBack:true //启用右滑关闭功能
+		});
+		var slider = mui("#slider");
+		slider.slider({
+			interval:2000
+		})
+		$.ajax({
+			url:"../../FrontEnd/getrecommend",
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				var ul = document.getElementById("rec");			
+				for(var k=0;k<data.length;k++){
+					ul.appendChild(createFragment(data[k].lname,data[k].imgUrl,data[k].lid,2));	
+				}
+			}			
+		})
+		for(var j=0;j<=5;j++){
+		
+			if(j==1){
+						$.ajax({
+							url:"../../FrontEnd/getFreeListenList",
+							type:"post",
+							async:false, 
+							data:{code:1,from:0,count:4},
+							dataType:"json",
+							success:function(data){
+								
+								var ul = document.getElementById("1");
+			
+									for(var k=0;k<=3;k++){
+										ul.appendChild(createFragment(data[k].title,data[k].imgUrl,data[k].id,1));	
+									}
+								
+							
+						}
+					});
+			}
+			else{
+				$.ajax({
+					url:"../../FrontEnd/getCourseList",
+					type:"post",
+					async:false, 
+					data:{code:j,from:0,count:4},
+					dataType:"json",
+					success:function(data){
+						
+						var ul = document.getElementById(j);
+						
+						
+							for(var k=0;k<=3;k++){
+							
+								ul.appendChild(createFragment(data[k].lname,data[k].imgUrl,data[k].lid,2));	
+							}
+							
+				}
+			});
+			}
+				 function createFragment(name,imgurl,id,kind) {
+						
+						
+						
+						var fragment = document.createDocumentFragment();
+						var li;
+					
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell mui-media mui-col-xs-6';
+							
+							if(kind==1){
+								li.innerHTML='<a href="course_detail.html?id='+id+'"><img style="width:174px;height:116px" class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
+								
+								}
+							else{
+							
+								li.innerHTML='<a href="course_detail.html?lid='+id+'"><img  style="width:174px;height:116px" class="mui-media-object" src="/webapps/../upload/cover/'+imgurl+'"><div class="mui-media-body">'+name+'</div></a>'
+							}
+							fragment.appendChild(li);
+						
+						return fragment;
+				};
+		}
+		/*  var rec_click = document.getElementById("lesson_click");
+	 	 rec_click.addEventListener('tap',function(){
+        		alert(this.href);
+        			mui.openWindow({
+        			url: this.href, 
+        			});
+        		//rec_click.click();
+        }); 
+		 mui.trigger(rec_click, "tap"); */
+	});
+	</script>
+	
+	</body>
+</html>

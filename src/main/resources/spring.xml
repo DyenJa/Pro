@@ -20,11 +20,11 @@
 	<!-- dbcp2lian'jie -->
 	<bean id="ds"  class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-			<property name="url"  value="jdbc:mysql://localhost:3306/education?useUnicode=true">
+			<property name="url"  value="jdbc:mysql://localhost:3306/team?characterEncoding=utf-8">
 			<!-- jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8 -->
 			</property>
 			<property name="username" value="root" />
-			<property name="password" value="root" />
+			<property name="password" value="1997" />
 	</bean>
 	
 	<!-- 配置session工厂 -->

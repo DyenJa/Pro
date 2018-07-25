@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.BackIndexMapper">
+	<select id = "findUserNum" resultType="Integer" parameterType="int">
+		SELECT count(*) from user
+			where qid=#{qid}
+	</select>
+	<select id = "findTodayBookNum" resultType="Integer" parameterType="int">
+		select count(*) FROM 
+		(
+		SELECT freelistenbook.id,freelistenbook.booktime,
+		freelisten.branchid
+		FROM `freelistenbook`
+		left JOIN freelisten 
+		on freelisten.id = freelistenbook.fid
+		) form1
+		 LEFT JOIN address
+		ON form1.branchid = address.aid
+		where qid=#{qid} and DATE_FORMAT(booktime,'%Y-%c-%d') = DATE_FORMAT(SYSDATE(),'%Y-%c-%d')
+	</select>
+	<select id = "findTodayOrderNum" resultType="Integer" parameterType="int">
+		select count(*)
+		from sorder
+		where qid=#{qid} and DATE_FORMAT(ordertime,'%Y-%c-%d') = DATE_FORMAT(SYSDATE(),'%Y-%c-%d')
+	</select>
+	<select id = "findTodayGoodNum" resultType="Integer" parameterType="int">
+		select count(*)
+		from messagelike left JOIN message
+		on messagelike.mid = message.mid
+		where qid=#{qid} and DATE_FORMAT(stime,'%Y-%c-%d') = DATE_FORMAT(SYSDATE(),'%Y-%c-%d')
+	</select>
+	<select id = "findMonthProfit" resultType="Double" parameterType="int">
+		select sum(total)
+		FROM sorder
+		where `status`='已使用' and qid=#{qid}
+		and DATE_FORMAT(ordertime,'%Y-%c') = DATE_FORMAT(SYSDATE(),'%Y-%c')
+	</select>
+	<select id = "findMonthMessageNum" resultType="Integer" parameterType="int">
+		select count(*)
+		FROM message
+		where qid=#{qid}
+		and DATE_FORMAT(mtime,'%Y-%c') = DATE_FORMAT(SYSDATE(),'%Y-%c')
+	</select>
+	
+	<select id="getMaxLessonId" parameterType="int" resultType="int">
+		select max(lid) from lesson where lesson.qid =#{qid}
+	</select>
+</mapper>
+

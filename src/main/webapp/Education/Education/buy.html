@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link rel="stylesheet" href="../css/buy.css">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script type="text/javascript" src="../js/jquery-3.2.0.min.js"></script>
+	
+		<script type="text/javascript" src="../js/mui.min.js" ></script>
+	<script>
+		$(function(){
+			var tel = sessionStorage.getItem("tel");
+			$('#inputphone').val(tel);
+			//注册提交按钮的点击事件
+			$("#buy").click(function(){
+				
+						
+						if(document.getElementById("inputname").value!=""&&document.getElementById("inputphone").value!=""){
+						var dataForm = new FormData(document.getElementById("buyform"));
+						dataForm.append("lid",getUrlParam("lid"));
+						//2.发送ajax请求
+						$.ajax({
+							url:"../../FrontEnd/buy/lesson",
+							type:"post",
+							data:dataForm,
+							processData:false,
+							contentType:false,
+							dataType:"json",
+							success:function(data){
+								if(data.result==0){
+									alert("下单成功");
+									window.location.href="course_list.html";
+								}
+								else if(data.result==1){
+									alert("下单失败");
+								}
+							}
+						});
+						//alert("OK");
+					}
+						else{
+							alert("输入值不合法");
+						}
+				});
+			
+		});
+		
+		
+		function init(){
+			var lessonid=getUrlParam("lid");
+			//alert(lessonid);
+			$.ajax({
+				url:"../../FrontEnd/getLesson111",
+				type:"get",
+				data:{
+					lid:lessonid
+					},
+					async:false,
+				dataType:"json",
+				success:function(data){
+					document.getElementById("buy").innerHTML="￥"+data[0]+"       立即下单";
+					document.getElementById("course_name").innerText=data[1];
+				}
+			});
+		}
+		
+		function getUrlParam(name) {
+		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+		    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+		    if (r != null) return unescape(r[2]); return null; // 返回参数值
+		}
+		
+		
+		</script>
+		<title>正在支付</title>
+	</head>
+	<body onload="init()">
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title" style="font-size: large;">购买</h1>
+		</header>
+		<div class="mui-content">
+			<div id="course_info">
+				<h4 align="center">课程名称</h4>
+			<h2 id="course_name" align="center"></h2>
+			</div>
+			
+			
+			<p>需要您填写一些信息：</p>
+			<div>
+				<form id="buyform" method="post" action class="mui-input-group" id="user_info">
+				
+					<div class="mui-input-row">
+						<label>电话：</label>
+						<input type="text" name=phonenumber id="inputphone" class="mui-input-clear">
+					</div>
+					<div class="mui-input-row">
+						<label>姓名：</label>
+						<input type="text" name=username id="inputname" class="mui-input-clear">
+					</div>
+				</form>
+				<div align="center" style="padding: 10% ;">
+						<button class="mui-btn mui-btn-success" id="buy" style="width: 50%;"></button>
+				</div>
+			</div>
+	
+		</div>
+	</body>
+</html>

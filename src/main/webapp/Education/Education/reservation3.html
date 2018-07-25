@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>1</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+			<script src="../js/mui.min.js"></script>
+
+	</head>
+
+	<body >
+	
+		<header class="mui-bar mui-bar-nav">
+			<a class=" mui-icon mui-icon-left-nav " href="mine.html"></a>
+			<h1 class="mui-title">我的订单</h1>
+		</header>
+	
+		<style>
+			.mui-control-content {
+				background-color: white;
+				min-height: 215px;
+			}
+			
+			.mui-control-content .mui-loading {
+				margin-top: 50px;
+			}
+			
+			* {
+				touch-action: pan-y;
+			}
+		</style>
+		<!--<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">WeChat</h1>
+		</header>-->
+
+		<div class="mui-content">
+			<div id="slider" class="mui-slider">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1mobile">
+						全部预约
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						待处理
+					</a>
+					<a class="mui-control-item" href="#item3mobile">
+						已处理
+					</a>
+				</div>
+
+				<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<h5 class="mui-content-padded">January 18, 2016</h5>
+							<div class="mui-card">
+								<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(img/1.jpg)"></div>
+								<div class="mui-card-content">
+									<div class="mui-card-content-inner">
+										<p style="color: #333;">java设计模式之单例模式1</p>
+									</div>
+								</div>
+							</div>
+							
+							<h5 class="mui-content-padded">January 19, 2016</h5>
+							<div class="mui-card">
+								<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(img/2.jpg)"></div>
+								<div class="mui-card-content">
+									<div class="mui-card-content-inner">
+										<p style="color: #333;">java入门精品公开课1</p>
+									</div>
+								</div>
+							</div>
+				</div>
+
+				<div id="item2mobile" class="mui-slider-item mui-control-content">
+					<h5 class="mui-content-padded">January 18, 2016</h5>
+							<div class="mui-card">
+								<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(img/3.jpg)"></div>
+								<div class="mui-card-content">
+									<div class="mui-card-content-inner">
+										<p style="color: #333;">python直播课</p>
+									</div>
+								</div>
+							</div>
+							
+
+				</div>
+
+				<div id="item3mobile" class="mui-slider-item mui-control-content">
+					<h5 class="mui-content-padded">January 19, 2016</h5>
+							<div class="mui-card">
+								<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(img/4.png)"></div>
+								
+								<div class="mui-card-content">
+									<div class="mui-card-content-inner">
+										<p style="color: #333;">java入门精品公开课3</p>
+									</div>
+								</div>
+							</div>
+							
+				</div>
+
+
+			</div>
+
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack: false
+			});
+			(function($) {
+				$('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				var html2 = '<h5 class="mui-content-padded">January 19, 2016</h5>';
+				var html3 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第三个选项卡子项-1</li><li class="mui-table-view-cell">第三个选项卡子项-2</li><li class="mui-table-view-cell">第三个选项卡子项-3</li><li class="mui-table-view-cell">第三个选项卡子项-4</li><li class="mui-table-view-cell">第三个选项卡子项-5</li></ul>';
+				var item2 = document.getElementById('item2mobile');
+				var item3 = document.getElementById('item3mobile');
+				document.getElementById('slider').addEventListener('slide', function(e) {
+					if(e.detail.slideNumber === 1) {
+						if(item2.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item2.querySelector('.mui-scroll').innerHTML = html2;
+							}, 500);
+						}
+					} else if(e.detail.slideNumber === 2) {
+						if(item3.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item3.querySelector('.mui-scroll').innerHTML = html3;
+							}, 500);
+						}
+					}
+				});
+				var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+				$('.mui-input-group').on('change', 'input', function() {
+					if(this.checked) {
+						sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+						//force repaint
+						sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+					}
+				});
+			})(mui);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,27 @@
+.layui-card {
+	margin: 20px 50px 20px 10px;
+	width: 90%;
+	float: right;
+	height: 600px;
+}
+.layui-card .layui-header{
+	padding-right: 4% ;
+	height:auto;
+}
+.layui-card .layui-card-body{
+	width: 95%;
+	margin: 0 auto;
+	height: 80%;
+}
+.layui-card .layui-card-body .scree{
+	height: auto;
+}
+.layui-card .layui-table-view{
+	height:100%;
+}
+.layui-card .layui-table-view .layui-table-box{
+	height:92%;
+}
+.layui-card .layui-table-view .layui-table-box .layui-table-body{
+	height: 100%;
+}

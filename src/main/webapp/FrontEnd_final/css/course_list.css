@@ -1,0 +1,36 @@
+
+			
+	
+			
+		
+		
+	
+
+		
+			* {
+				margin: 0;
+				padding: 0;
+				
+			}
+		
+			
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			
+			.nav li a {
+				display: block;
+				text-indent: 20px;
+				height: 30px;
+				line-height: 30px;
+				width: 120px;
+				background-color: #efefef;
+				margin-bottom: 1px;
+				font-size: 14px;
+			}
+			
+			.nav li a:hover {
+				background-color: #F60;
+				color: #fff;
+			}

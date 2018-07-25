@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style type="text/css">
+		* { touch-action: none; }
+			.blank {
+				clear: both;
+				overflow: hidden;
+				display: block;
+				overflow: hidden;
+			}
+			.text-center {
+				text-align: center
+			}
+			
+			.col-xs-3 {
+				width: 24%;
+				display: inline-block;
+			}
+			
+			.footnav {
+				width: 100%;
+				position: fixed;
+				border-top: 1px solid #ccc;
+				padding: 5px 0px;
+				bottom: 0px;
+				left: 0px;
+				background: #EFEFF4;
+			}
+			
+			.footnav a {
+				color: #666;
+			}
+			
+			span {
+				display: block;
+			}
+		</style>	
+		
+	</head>
+
+	<body>
+		<!-- <header class="mui-bar mui-bar-nav">
+			
+			<h1 id="title" class="mui-title">朋友圈</h1>
+		</header> -->
+		
+		<p align="center"  style="margin-top:5%; margin-bottom:5%; font: '微软雅黑';  font-size: large; color: black;">朋友圈</p>
+
+		<div class="mui-content"></div>		
+		<span class="blank" style="height:60px;"></span>
+			
+				<div class="footnav" style="z-index: 99;">
+					<div class="col-xs-3 text-center">
+						<a href="index.html">
+							<span class="mui-icon mui-icon-home"></span>
+							<span>首页</span>
+						</a>
+					</div>
+					<div class="col-xs-3 text-center">
+						<a href="course_list.html">
+							<span class="mui-icon mui-icon-list"></span>
+							<span>课程</span>
+						</a>
+					</div>
+					<div class="col-xs-3 text-center">
+						<a href="#" style="color: #007aff">
+							<span class="mui-icon mui-icon-pengyouquan"></span>
+							<span>发现</span>
+						</a>
+					</div>
+					<div class="col-xs-3 text-center">
+						<a href="mine.html" >
+							<span class="mui-icon mui-icon-contact mui-icon-icon-contact"></span>
+							<span>我的</span>
+						</a>
+					</div>
+				</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript">
+		//启用双击监听
+		/* var messagedata = getMessagedata(); */
+		 (function($) {
+		     if(true){
+			 mui.init({
+					gestureConfig:{
+						doubletap:true
+					},
+					subpages:[{
+						url:'pullrefresh_sub.html',
+						id:'pullrefresh_sub.html',
+						styles:{
+							top: '60px',
+							bottom: '0px',
+						}
+					}]
+				});
+		 }else{
+			 mui.init({
+					gestureConfig:{
+						doubletap:true
+					},
+					subpages:[{
+						url:'pullrefresh_sub2.html',
+						id:'pullrefresh_sub2.html',
+						styles:{
+							top: '60px',
+							bottom: '0px',
+						}
+					}]
+				});
+		 }
+		 })(mui);
+		
+		
+	
+		/* var contentWebview = null;
+		document.querySelector('header').addEventListener('doubletap',function () {
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+		}); */
+	</script>
+
+</html>

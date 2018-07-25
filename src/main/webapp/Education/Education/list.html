@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>课程</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/course_list.css" />
+		 <link rel="stylesheet" href="../css/mui.min.css"> 
+		<script type="application/javascript" src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.mui-content>.mui-table-view:first-child {
+				margin-top: -1px;
+			}
+		</style>
+		
+		
+		<script>
+		function getRootPath(){
+			//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+			var curWwwPath=window.document.location.href;
+			//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+			var pathName=window.document.location.pathname;
+			var pos=curWwwPath.indexOf(pathName);
+			//获取主机地址，如： http://localhost:8083
+			var localhostPaht=curWwwPath.substring(0,pos);
+			//获取带"/"的项目名，如：/uimcardprj
+			var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+			return(localhostPaht+projectName);
+		}
+		
+		function testfunc(){
+			
+			//window.top.location.href="buy.html";
+			//alert("sasas");
+		
+		}
+	
+		function getUrlParam(name) {
+		    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+		    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+		    if (r != null) return unescape(r[2]); return null; // 返回参数值
+		}
+		
+	
+		mui(document).on('tap','a',function(){
+			  //业务逻辑
+			 	top.window.location.href=this.href;
+			})
+		
+	
+		
+		
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				
+				up: {
+					auto:true,
+					contentrefresh: '正在加载...',
+					callback: pullupRefresh
+				}
+			}
+		});
+	
+	
+		var over = 0;
+		function pullupRefresh() {
+			setTimeout(function() {
+			
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh((over> 0)); //参数为true代表没有更多数据了。
+				
+				//上拉  一次加载这么多
+				var table = document.body.querySelector('.mui-table-view');
+				var cells = document.body.querySelectorAll('.showcourse');
+			
+				var branchid=getUrlParam("branch");
+				
+				var newListStart=cells.length;
+				var num=5;//一次加载五门课
+			
+				//alert("开始"+newListStart);
+				if(over==0){
+				$.ajax({
+					url:getRootPath()+'/FrontEnd/getAllCourseByBranch',
+					type:"get",
+					data:{aid:branchid,from:newListStart,to:num},
+					dataType:"json",
+					success:function(data){
+						
+					
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。不能上拉了
+						for(var i=0;i<data.result.length;i++){
+							var lid = data.result[i].lid;
+							var url= data.result[i].url;
+							var name=data.result[i].lname;
+						
+							var li = document.createElement('li');
+							li.className = 'mui-table-view-cell';
+							li.style.color="#B5B5B5";
+							li.style.marginBottom='20px';
+							li.innerHTML = '<a href="course_detail.html?lid='+lid+'"><img src="/webapps/../upload/cover/'+url+'"  class="showcourse" width="110%" height="150px" id="'+lid+'"  /></a>';
+							li.innerHTML+='<p align="center" >'+name+'</p>';
+							table.appendChild(li);		
+							
+						}
+					
+						if(document.body.querySelectorAll('.showcourse').length==data.total){
+							
+							over++;
+							//alert("取完了");
+						}
+					
+					}
+				});
+				}		
+			}, 0);
+			
+		}
+		</script>
+		
+	</head>
+
+	<body >
+		
+		
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					
+				</ul>
+			</div>
+		</div>
+		
+	</body>
+
+</html>

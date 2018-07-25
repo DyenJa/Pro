@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.CourseMapper">
+	<!-- 配置   (1对多)   关系的映射类型 -->
+	
+	<select id="getLessons" parameterType="com.neusoft.vo.TotalCoursePageVo" resultType="com.neusoft.po.Lesson" >
+	 		 SELECT lesson.* from lesson
+			 where qid=#{qid}
+			order by(pubtime) desc
+			limit #{from},#{to};
+	</select>
+	
+		<select id="getLessonsByBranchid" parameterType="com.neusoft.vo.CoursePageVo" resultType="com.neusoft.po.Lesson" >
+			SELECT lesson.*  FROM lesson ,lessonbranch
+			where lesson.lid=lessonbranch.lid and lessonbranch.branchid=#{aid}
+			order by(pubtime) desc
+			limit #{from},#{limit};
+	</select>
+	
+	<select id="getFreeListensByBranch" parameterType="com.neusoft.vo.FreeListenPageVo" resultType="com.neusoft.po.FreeListen" >
+			SELECT freelisten.* from freelisten
+			 where branchid=#{aid}
+			 order by(pubtime) desc
+			 limit #{from},#{limit};
+	</select>
+	
+	<select id="getFreeListens" parameterType="com.neusoft.vo.TotalFreeListenPageVo" resultType="com.neusoft.po.FreeListen" >
+	 		 SELECT freelisten.* from freelisten,address
+			 where freelisten.branchid=address.aid and address.qid=#{qid}
+			 order by(pubtime) desc
+			 limit #{from},#{to};
+	</select>
+		<select id="getLessonsByCategory" parameterType="com.neusoft.vo.CourseCategoryVo" resultType="com.neusoft.po.Lesson" >
+	 		 SELECT * from lesson
+	 		 where category=#{category} and qid=#{qid}
+	 		 order by (pubtime) desc
+	 		 limit #{from},#{count};
+	</select>
+	<select id="getTotalNumOfLessons" parameterType="int" resultType="int" >
+			SELECT count(lesson.lid)  FROM lesson ,lessonbranch,address
+			 where lesson.lid=lessonbranch.lid and lessonbranch.branchid=address.aid and address.qid=#{qid}
+	
+	</select>
+		<select id="getTotalNumOdBranchLessons" parameterType="int" resultType="int" >
+			SELECT count(lesson.lid)  FROM lesson ,lessonbranch
+			where lesson.lid=lessonbranch.lid and lessonbranch.branchid=#{aid};
+	
+	</select>
+	<insert  id="addLesson" parameterType="com.neusoft.po.Lesson" >
+		insert into lesson(lname,imgurl,lprice,ldesc,category,qid,pubtime ) 
+		values ( #{lname},#{imgUrl},#{lprice},#{ldesc},#{category},#{qid},#{pubTime} )
+		 	<selectKey keyProperty="lid" order="AFTER" resultType="int">
+           		 select LAST_INSERT_ID()
+     		</selectKey>
+	</insert>
+	
+	<insert  id="addLessonBranch" parameterType="com.neusoft.po.LessonBranch" >
+		insert into lessonbranch(lid,branchid ) values (#{lid},#{branchid})
+	</insert>
+		<update  id="updateLesson" parameterType="com.neusoft.po.Lesson" >
+		update lesson set
+					lname=#{lname},
+					imgurl=#{imgUrl},
+					lprice=#{lprice},
+					ldesc=#{ldesc},
+					category=#{category},
+					qid=#{qid},
+					pubtime=#{pubTime}
+		where lid=#{lid}
+	</update>
+	
+	<update  id="updateLessonBranch" parameterType="com.neusoft.po.LessonBranch" >
+		update lessonbranch set branchid=#{branchid} where lid=#{lid}; 
+	</update>
+	<select id="getLesson" parameterType="int" resultType="com.neusoft.po.Lesson" >
+		select * from lesson where lid=#{lid}
+	</select>
+	<insert  id="addFreeListen" parameterType="com.neusoft.po.FreeListen" >
+		insert into FREELISTEN(title,imgurl,fdesc,status,branchid,pubtime ) 
+		values ( #{title},#{imgUrl},#{fdesc},#{status},#{branchid},#{pubTime} )
+		 	<selectKey keyProperty="id" order="AFTER" resultType="int">
+           		 select LAST_INSERT_ID()
+     		</selectKey>
+	</insert>
+	
+	<update  id="updateFreeListen" parameterType="com.neusoft.po.FreeListen" >
+		update freelisten set
+					title=#{title},
+					imgurl=#{imgUrl},
+
+					fdesc=#{fdesc},
+					status=#{status},
+					branchid=#{branchid},
+					pubtime=#{pubTime}
+		where id=#{id}
+	</update>
+	
+	<select id="getFreeListen" parameterType="int" resultType="com.neusoft.po.FreeListen" >
+		select * from FREELISTEN where id=#{id}
+	</select>
+	
+	<delete id="deleteCourse" parameterType="int">
+		
+		delete from lesson where lid=#{lid}
+	</delete>
+
+	<delete id="deleteFreeListen" parameterType="int">
+		
+		delete from freelisten where id=#{id}
+	</delete>
+	
+	
+
+	<select id="getTotalNumOfFreeListens" parameterType="int" resultType="int" >
+		select count(*) from FREELISTEN,address
+		 where qid=#{qid} and address.aid=FREELISTEN.branchid
+	</select>
+	
+	<select id="getTotalNumOdBranchFreeListen" parameterType="int" resultType="int" >
+			SELECT count(*)  FROM freelisten
+			where branchid=#{aid}
+	</select>
+	
+	
+
+	<insert id="addCourseImg" parameterType="Map">
+		insert into swiper(qid,imgurl,category) values(#{qid},#{imgurl},'B');
+	</insert>
+	
+	
+	
+	
+
+	
+	
+
+	
+	
+	
+	
+	
+	
+</mapper>

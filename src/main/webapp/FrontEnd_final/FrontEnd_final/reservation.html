@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>1</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<script src="../js/mui.min.js"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.js"></script>
+<script>
+	//声明全局变量page,找到page的数量
+	var page1=1;
+	var page2=1;
+	var page3=1;
+	var totalPage1;
+	var totalPage2;
+	var totalPage3;
+	//1.send ajax request
+	function getRootPath(){
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath=window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName=window.document.location.pathname;
+    var pos=curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+    var localhostPaht=curWwwPath.substring(0,pos);
+    //获取带"/"的项目名，如：/uimcardprj
+    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+    return(localhostPaht+projectName);
+	}
+	function getTotalPages(){
+		$.ajax({
+			url:getRootPath()+"/freeListenBook/findCountPageThree",
+			data:{tel:"123",qid:1},
+			success:function(data){
+				console.log(data);
+				totalPage1 = data[0];
+				totalPage2 = data[1];
+				totalPage3 = data[2];
+			}
+		})
+	}
+	function loadNextPage1(){
+		$.ajax({
+		
+		url:getRootPath()+"/freeListenBook/findPersonAll",
+		data:{tel:"123",qid:1,currentPage:page1} ,
+		success:function(data){
+			console.log(data);
+			for(var i=0;i<data.length;i++){
+				var tr = '<li><h5 class="mui-content-padded">'+data[i].freelisten.pubTime+'</h5>';
+				tr += '<div class="mui-card">';
+				tr += '<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/' + data[i].freelisten.imgUrl +')"></div>';
+				tr += '<div class="mui-card-content">';
+				tr += '<div class="mui-card-content-inner">';
+				tr += '<p style="color: #333;">'+data[i].freelisten.title+'</p>';
+				tr += '</div></div></div></li>';
+				$("#item1mobile > ul").append(tr);
+			}
+		}
+		})
+		page1++;	
+	}
+	function loadNextPage2(){
+		$.ajax({
+			url:getRootPath()+"/freeListenBook/findPersonByStatus",
+			data:{tel:"123",status:"待处理",qid:1,currentPage:page2} ,
+			type:"post",
+			success:function(data){
+				console.log(data);
+				for(var i=0;i<data.length;i++){
+					var tr = '<h5 class="mui-content-padded">'+data[i].freelisten.pubTime+'</h5>';
+					tr += '<div class="mui-card">';
+					tr += '<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/' + data[i].freelisten.imgUrl +')"></div>';
+					tr += '<div class="mui-card-content">';
+					tr += '<div class="mui-card-content-inner">';
+					tr += '<p style="color: #333;">'+data[i].freelisten.title+'</p>';
+					tr += '</div></div></div>';
+					$("#item2mobile").append(tr);
+				}
+			}
+		})
+		page2++;
+	}
+	function loadNextPage3(){
+		$.ajax({
+			url:getRootPath()+"/freeListenBook/findPersonByStatus",
+			data:{tel:"123",status:"已处理",qid:1,currentPage:page3} ,
+			type:"post",
+			success:function(data){
+				console.log(data);
+				for(var i=0;i<data.length;i++){
+					var tr = '<h5 class="mui-content-padded">'+data[i].freelisten.pubTime+'</h5>';
+					tr += '<div class="mui-card">';
+					tr += '<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/' + data[i].freelisten.imgUrl +')"></div>';
+					tr += '<div class="mui-card-content">';
+					tr += '<div class="mui-card-content-inner">';
+					tr += '<p style="color: #333;">'+data[i].freelisten.title+'</p>';
+					tr += '</div></div></div>';
+					$("#item3mobile").append(tr);
+				}
+			}
+		})
+		page3++;
+	}
+	$(function(){
+		loadNextPage1();
+		loadNextPage2();
+		loadNextPage3();
+		getTotalPages();
+	})
+	
+	
+</script>
+	</head>
+
+	<body >
+	
+		<header class="mui-bar mui-bar-nav">
+			<a class=" mui-icon mui-icon-left-nav " href="../mine.html"></a>
+			<h1 class="mui-title">我的订单</h1>
+		</header>
+	
+		<style>
+			.mui-control-content {
+				background-color: white;
+				min-height: 215px;
+			}
+			
+			.mui-control-content .mui-loading {
+				margin-top: 50px;
+			}
+			
+			* {
+				touch-action: pan-y;
+			}
+		</style>
+		<!--<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">WeChat</h1>
+		</header>-->
+
+		<div class="mui-content mui-scroll-wrapper  " id="pullrefresh">
+			<div class="table_view">
+			<div id="slider" class=" mui-slider">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1mobile">
+						全部预约
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						待处理
+					</a>
+					<a class="mui-control-item" href="#item3mobile">
+						已处理
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<ul class="mui-table-view" >
+						
+						</ul>
+						
+						<!-- <h5 class="mui-content-padded">January 18, 2016</h5>
+						<div class="mui-card">
+							<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/1.jpg)"></div>
+							<div class="mui-card-content">
+								<div class="mui-card-content-inner">
+									<p style="color: #333;">java设计模式之单例模式1</p>
+								</div>
+							</div>
+						</div>
+								
+						<h5 class="mui-content-padded">January 19, 2016</h5>
+						<div class="mui-card">
+							<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/2.jpg)"></div>
+							<div class="mui-card-content">
+								<div class="mui-card-content-inner">
+									<p style="color: #333;">java入门精品公开课1</p>
+								</div>
+							</div>
+						</div> -->
+					</div>
+	
+					<div id="item2mobile" class="mui-slider-item mui-control-content ">
+						<!-- <h5 class="mui-content-padded">January 18, 2016</h5>
+								<div class="mui-card">
+									<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/3.jpg)"></div>
+									<div class="mui-card-content">
+										<div class="mui-card-content-inner">
+											<p style="color: #333;">python直播课</p>
+										</div>
+									</div>
+								</div>
+								 -->
+	
+					</div>
+	
+					<div id="item3mobile" class="mui-slider-item mui-control-content mui-scroll">
+						<!-- <h5 class="mui-content-padded">January 19, 2016</h5>
+								<div class="mui-card">
+									<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(../img/4.png)"></div>
+									
+									<div class="mui-card-content">
+										<div class="mui-card-content-inner">
+											<p style="color: #333;">java入门精品公开课3</p>
+										</div>
+									</div>
+								</div> -->
+								
+					</div>
+				</div>
+
+			</div>
+			</div>
+		</div>
+		
+		<script>
+			mui.init({
+				swipeBack: false
+			});
+			(function($) {
+				$('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				var html2 = '<h5 class="mui-content-padded">January 19, 2016</h5>';
+				var html3 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第三个选项卡子项-1</li><li class="mui-table-view-cell">第三个选项卡子项-2</li><li class="mui-table-view-cell">第三个选项卡子项-3</li><li class="mui-table-view-cell">第三个选项卡子项-4</li><li class="mui-table-view-cell">第三个选项卡子项-5</li></ul>';
+				var item2 = document.getElementById('item2mobile');
+				var item3 = document.getElementById('item3mobile');
+				document.getElementById('slider').addEventListener('slide', function(e) {
+					if(e.detail.slideNumber === 1) {
+						if(item2.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item2.querySelector('.mui-scroll').innerHTML = html2;
+							}, 500);
+						}
+					} else if(e.detail.slideNumber === 2) {
+						if(item3.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item3.querySelector('.mui-scroll').innerHTML = html3;
+							}, 500);
+						}
+					}
+				});
+				var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+				$('.mui-input-group').on('change', 'input', function() {
+					if(this.checked) {
+						sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+						//force repaint
+						sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+					}
+				});
+			})(mui);
+		</script>
+		<script>
+		
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					style:'circle',
+					callback: pulldownRefresh
+				},
+				up: {	
+					auto:true,
+					contentrefresh: '正在加载...',
+					callback: pullupRefresh
+				}
+			}
+		});
+		
+		function pullupRefresh() {
+			var select = mui("#slider").slider().getSlideNumber();
+			/* alert(select); */
+			setTimeout(function() {
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。
+				if(select==0){
+					if(page1<=totalPage1)
+					loadNextPage1();
+				}else if(select==1){
+					if(page2<=totalPage2)
+					loadNextPage2();
+				}else if(select==2){
+					if(page3<=totalPage3)
+					loadNextPage3();
+				}
+			}, 1500);
+		}
+
+		function addData() {
+			var table = document.body.querySelector('.mui-table-view');
+			var cells = document.body.querySelectorAll('.mui-table-view-cell');
+			for(var i = cells.length, len = i + 5; i < len; i++) {
+				var li = document.createElement('li');
+					var hr = document.createElement('hr');
+					li.className = 'mui-table-view-cell';
+					li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+					table.appendChild(li);
+			}
+		}
+		/**
+		 * 下拉刷新具体业务实现
+		 */
+		function pulldownRefresh() {
+			setTimeout(function() {
+				addData();
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+				mui.toast("为你推荐了5篇文章");
+			}, 1500);
+		}
+
+	</script>
+	</body>
+
+</html>

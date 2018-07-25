@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.EnterpriseMapper">
+    
+     <!-- 配置一对多的映射关系，管理一个企业对应多个企业图片 -->
+	<resultMap type="com.neusoft.po.Enterprise" id="Enterprise_Swiper_info">
+		<id property="qid" column="qid" />
+		<result property="name" column="name" />
+		<result property="videopath" column="videopath" />
+		<result property="introduction" column="introduction" />
+		<result property="jczs" column="jczs" />
+		<collection property="swiperList" ofType="com.neusoft.po.Swiper">
+			<id property="id" column="id" />
+			<result property="qid" column="qid" />
+			<result property="imgurl" column="imgurl" />
+			<result property="category" column="category"/>
+		</collection>
+	</resultMap>
+	
+	<select id="findEnterpriseByQid" parameterType="int" resultMap="Enterprise_Swiper_info">
+	        select enterprise.*,swiper.id,swiper.imgurl,swiper.category
+			from enterprise left join swiper
+			on enterprise.qid = swiper.qid
+			where enterprise.qid=#{qid} and category = 'A';
+	</select>
+	
+	<update id="updateEnterpriseInfo" parameterType="com.neusoft.po.Enterprise">
+	    update enterprise
+		set name=#{name}, introduction=#{introduction},jczs=#{jczs}
+		where qid=#{qid}
+	</update>
+	
+	<delete id="deleteEnterpriseImgById" parameterType="com.neusoft.po.Swiper" >
+	    delete from swiper
+	    where qid = #{qid} and id=#{id}
+	</delete>
+	
+	<insert id="addImgToSwiperByQid" parameterType="com.neusoft.po.Swiper">
+	    insert into Swiper(id,qid,imgurl,category) 
+	    values(null, #{qid}, #{imgurl},#{category})
+	    
+	</insert>
+	
+	<update id="deleteEnterpriseVideoByQid" parameterType="int">
+	    update enterprise
+	    set videopath=null
+	    where qid=#{qid}
+	</update>
+	
+	<update id="updateEnterpriseVideo" parameterType="com.neusoft.po.Enterprise">
+	    update enterprise
+	    set videopath=#{videopath}
+	    where qid=#{qid}
+	</update>  
+	
+	<select id="selectEnterpriseJCZS" parameterType="int" resultType="String">
+	    select jczs
+	    from enterprise
+	    where qid=#{qid}
+	</select>
+	  
+ 	<select id="selectAddressByQid" parameterType="int" resultType="com.neusoft.po.Address">
+ 	    select aid, branch, address, tel, isDeleted
+ 	    from address
+ 	    where qid = #{qid};
+ 	</select>
+ 	
+ 	<select id="viewSingleAddressByQidId" parameterType="com.neusoft.vo.SingleAddress" resultType="com.neusoft.po.Address">
+ 	    select branch, address, tel, longitude, latitude
+ 	    from address
+ 	    where qid = #{qid} and aid=#{aid};
+ 	</select>
+ 	
+ 	<update id="updateBranchInfoByQidId" parameterType="com.neusoft.po.Address">
+ 	    update address
+ 	    set branch=#{branch},address=#{address},tel=#{tel},longitude=#{longitude},latitude=#{latitude}
+ 	    where qid=#{qid} and aid=#{aid}; 	    
+ 	</update>
+ 	
+ 	<insert id="insertBranchByQid" parameterType="com.neusoft.po.Address">
+ 	    insert into address (aid, qid, branch, address, tel, longitude, latitude,isDeleted)
+ 	    values (null, #{qid}, #{branch}, #{address}, #{tel}, #{longitude}, #{latitude},#{isDeleted});
+ 	</insert>
+ 	
+ 	<update id="deleteBranchByQidId" parameterType="com.neusoft.vo.SingleAddress">
+ 	    update address
+ 	    set isDeleted = 1
+ 	    where qid=#{qid} and aid=#{aid};
+ 	</update>
+ 	
+ 	<select id="selectTeacherByQid" parameterType="int" resultType="com.neusoft.po.Teacher">
+ 	    select tid, tname, tphoto, introduction
+ 	    from teacher
+ 	    where qid=#{qid };
+ 	</select>
+ 	
+ 	<select id="selectSingleTeacherPageByQid" parameterType="com.neusoft.vo.SinglePage" resultType="com.neusoft.po.Teacher">
+ 	    select *
+		from (
+		select @rownum:=@rownum+1 as rownum, a.* 
+			  from (select tid, tname, tphoto, introduction
+		            from teacher
+		            where qid = #{qid}
+		            )a,
+		            (select @rownum :=0)t
+		)b
+			 where b.rownum >=#{startNum} and b.rownum &lt;=#{endNum};
+ 	</select>
+ 	
+ 	<select id="selectSingleTeacherByQidId" parameterType="com.neusoft.vo.SingleTeacher" resultType="com.neusoft.po.Teacher">
+ 	    select tname,tphoto, introduction
+ 	    from teacher
+ 	    where qid=#{qid} and tid=#{tid};
+ 	</select>
+ 	
+ 	<update id="deleteTeacherPhotoByQidTId" parameterType="com.neusoft.vo.SingleTeacher">
+ 	    update teacher
+ 	    set tphoto = null
+ 	    where qid=#{qid} and tid=#{tid};
+ 	</update>
+ 	
+ 	<update id="updateTeacherPhotoByQidTid" parameterType="com.neusoft.po.Teacher">
+ 	    update teacher
+ 	    set tphoto = #{tphoto}
+ 	    where qid=#{qid} and tid=#{tid};
+ 	</update>
+ 	
+ 	<update id="updateTeacherInfoByQidTid" parameterType="com.neusoft.po.Teacher">
+ 	    update teacher
+ 	    set tname=#{tname}, introduction=#{introduction}
+ 	    where qid=#{qid} and tid=#{tid};
+ 	</update>
+ 	
+ 	<insert id="insertTeacherByQid" parameterType="com.neusoft.po.Teacher">
+ 	    insert into teacher(tid, tname, tphoto, introduction, qid)
+ 	    values(null, #{tname}, #{tphoto}, #{introduction}, #{qid});
+ 	</insert>
+ 	
+ 	<delete id="deleteTeacherByQidTid" parameterType="com.neusoft.vo.SingleAddress">
+ 	    delete from teacher
+ 	    where qid=#{qid} and tid=#{tid};
+ 	</delete>
+ 	
+ 	<select id="findAllTeacherByQid" parameterType="int" resultType="int">
+ 	    select count(tid)
+ 	    from teacher;
+ 	</select>
+ 	
+ 	<insert id="uploadFirstPageOfTeachers" parameterType="com.neusoft.po.FirstPageOfTeachers">
+ 	    insert into firstPageOfTeachers (id, qid, img)
+ 	    values (null, #{qid}, #{img});
+ 	</insert>
+ 	
+ 	<select id="selectFirstPageOfTeachers" parameterType="int" resultType="com.neusoft.po.FirstPageOfTeachers">
+ 	    select id, img
+ 	    from firstPageOfteachers
+ 	    where qid = #{qid};
+ 	</select>
+ 	
+ 	<delete id="deleteFirstPageOfTeachers" parameterType="int">
+ 	    delete from firstPageOfTeachers
+ 	    where qid=#{qid};
+ 	</delete>
+ 	
+</mapper>

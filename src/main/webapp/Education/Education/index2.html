@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />-->
+		<style type="text/css">
+			#list {
+				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
+				margin-top: -1px;
+			}
+			#enterprise_img div a img{
+				width:100%;
+				height:200px;
+			}
+		</style>
+		<style type="text/css">
+			.blank
+			{ 
+				clear:both;
+				 overflow:hidden; 
+				 display:block; 
+				 overflow:hidden;
+			}	
+		</style>
+	
+		<style type="text/css">		
+			.text-center{text-align:center}
+			.col-xs-3{width: 24%;display: inline-block;}
+			.footnav { width: 100%; position: fixed; border-top: 1px solid #ccc; padding: 5px 0px; bottom: 0px; left: 0px; background: #EFEFF4;}
+			.footnav a { color: #666;}
+			span{
+				display: block;
+			}
+		</style>
+		<script src="js/mui.min.js"></script>
+	</head>
+	<body style="height: 100%;">
+		<p align="center" style="margin-top:5%;margin-bottom:5%;font: '微软雅黑'; font-size: large;color: black;">首页</p>
+	
+		<div id="slider" class="mui-slider" style="height: 80%;">
+			<div class="mui-slider-group mui-slider-loop" id="enterprise_img">
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="img/yuantiao.jpg">
+					</a>
+				</div>
+			<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/shuijiao.jpg">
+					</a>
+				</div>
+			<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/muwu.jpg">
+					</a>
+				</div>
+			<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/cbd.jpg">
+					</a>
+				</div>
+			<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/cbd.jpg">
+					</a>
+				</div>
+			<div class="mui-slider-item">
+					<a href="#">
+						<img src="img/cbd.jpg">
+					</a>
+				</div>
+			
+			</div>
+			<div class="mui-slider-indicator" id="enterprise_img_frontController">
+				<div class="mui-indicator mui-active"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+				
+			</div>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				 swipeBack:true //启用右滑关闭功能
+			});
+			var slider = mui("#slider");
+			slider.slider({
+				interval:2000
+			})
+		</script>
+
+
+		<hr />
+		<div class="mui-content" >
+		        <ul class="mui-table-view mui-grid-view mui-grid-9">
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="company.html">
+		                    <span class="mui-icon mui-icon-home"></span>
+		                    <div class="mui-media-body">公司简介</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="teachers.html">
+		                    <span class="mui-icon mui-icon-person"></span>
+		                    <div class="mui-media-body">师资力量</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;">
+		            	<a href="location.html">
+		                    <span class="mui-icon mui-icon-location"></span>
+		                    <div class="mui-media-body">学校位置</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="width: 25%;"><a href="#">
+		                    <span class="mui-icon mui-icon-chatbubble"></span>
+		                    <div class="mui-media-body">联系我们</div></a></li>
+		        </ul> 
+		</div>
+		<hr />
+		
+		
+		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="mui-scroll">
+            <a class="mui-control-item mui-active">
+                                推荐
+            </a>
+            <a class="mui-control-item">
+              	预约课课程
+            </a>
+            <a class="mui-control-item">
+               	精品课课程
+            </a>
+           <a class="mui-control-item">
+               	java
+            </a>
+            <a class="mui-control-item">
+               	python
+            </a>
+            <a class="mui-control-item">
+               	AI
+            </a>
+        </div>
+    </div>
+
+		<div class="mui-content" >
+		   
+		    <ul class="mui-table-view mui-grid-view">
+		        <li class="mui-table-view-cell mui-media mui-col-xs-6">
+		            <a href="course_detail.html">
+		                <img class="mui-media-object" src="img/shuijiao.jpg">
+		                <div class="mui-media-body">幸福就是可以一起睡觉</div></a></li>
+		        <li class="mui-table-view-cell mui-media mui-col-xs-6">
+		            <a href="course_detail.html">
+		                <img class="mui-media-object" src="img/muwu.jpg">
+		                <div class="mui-media-body">想要一间这样的木屋，静静的喝咖啡</div></a></li>
+		        <li class="mui-table-view-cell mui-media mui-col-xs-6">
+		            <a href="course_detail.html"><img class="mui-media-object" src="img/cbd.jpg">
+		                <div class="mui-media-body">Color of SIP CBD</div></a></li>
+		        <li class="mui-table-view-cell mui-media mui-col-xs-6">
+		            <a href="course_detail.html">
+		                <img class="mui-media-object" src="img/yuantiao.jpg">
+		                <div class="mui-media-body">静静看这世界</div></a></li>
+		    </ul>
+		     <a href="more_course.html"><span style="padding-left: 82%;">>>更多</span></a>
+	</div>
+<span class="blank" style="height:60px;"></span>
+
+	<div class="footnav">
+	    <div class="col-xs-3 text-center">
+	    	<a href="#?qid=1" style="color: #007aff">
+	    	<span class="mui-icon mui-icon-home"></span>
+	    	<span>首页</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="course_list.html">
+	    	<span class="mui-icon mui-icon-list"></span>
+	    	<span>课程</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="more.html">
+	    	<span class="mui-icon mui-icon-pengyouquan"></span>
+	    	<span>发现</span>
+	    </a>
+	    </div>
+	    <div class="col-xs-3 text-center">
+	    	<a href="mine.html" >
+	    	<span class="mui-icon mui-icon-contact mui-icon-icon-contact"></span>
+	    	<span>我的</span>
+	   		</a>
+	    </div>
+	</div>
+	
+	<script src="../BackEnd_final/jquery-3.2.0.min.js"></script>
+	<script>
+	$(function(){
+		var paraString = location.search;
+		//alert(paraString.substring(5,6));
+		var qid= paraString.substring(5,6);
+		$.ajax({
+			url:"../test/Handler_frontEndFindEnterpriseByQid",
+			type:"post",			
+			dataType:"json",
+			success:function(data){
+				console.log(data);				
+				var cont = document.getElementById("enterprise_img_frontController");
+				var img = document.getElementById("enterprise_img");
+				cont.innerHTML = "";
+				img.innerHTML = "";
+				img.innerHTML += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[data.swiperList.length-1].imgurl+'"/></a></div>';
+				for(var i = 0; i< data.swiperList.length; i++){
+					img.innerHTML+= '<div class="mui-slider-item"><a href="#"><img src="/uploadImage/'+data.swiperList[i].imgurl+'"/></a></div>';
+					if(i==0){
+						cont.innerHTML += '<div class="mui-indicator "></div>';
+					}
+					else{
+						cont.innerHTML  += '<div class="mui-indicator"></div>';
+					}
+				}
+				img.innerHTML+= '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="/uploadImage/'+data.swiperList[0].imgurl+'"/></a></div>';
+
+			}
+		});
+	});
+	</script>
+	
+	</body>
+</html>

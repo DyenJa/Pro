@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.MessageMapper">
+ 
+		<insert id="addMessage" parameterType="com.neusoft.po.Message">
+				insert into  message(mtitle,mtime,qid) values(#{mtitle},now(),#{qid})
+				<selectKey keyProperty="mid" order="AFTER" resultType="int">
+						select LAST_INSERT_ID()
+				</selectKey>
+		</insert>
+		<insert id="addMessageImg"  parameterType="com.neusoft.po.MessageImg">
+				insert into messageimg(mid,imgurl) values(#{mid},#{imgUrl})
+		</insert>
+		<select id="getTotalNumOfMessages" parameterType="int" resultType="int">
+			select count(*) from message where qid = #{qid}
+		</select>
+			
+			<resultMap type="com.neusoft.po.Message" id="message_img__map">
+				<id property="mid"  column="mid"/>
+				<result property="mtitle" column="mtitle"/>
+				<result property="mtime" column="mtime"/>
+				<result property="qid" column="qid"/>
+				<result property="likenum" column="likenum"/>
+				<result property="replynum" column="replynum"/>
+				<collection property="messageimgs" ofType="com.neusoft.po.MessageImg" >
+						<result property="imgUrl" column="imgurl"/>
+				</collection>
+			</resultMap> 
+			
+	 	<select id="getMessages" parameterType="Map" resultMap="message_img__map">
+				SELECT t_temp3.mid,t_temp3.mtitle,DATE_FORMAT(t_temp3.mtime,'%Y-%m-%d %H:%i:%s') mtime,t_temp3.qid,t_temp3.likenum,t_temp3.replynum,messageimg.imgurl from 
+					(select t_temp2.*,t_reply.replynum from 
+					(select t_temp1.* from 
+					(select message.*,t_like.likenum from message LEFT JOIN 
+					(select count(*) likenum,mid from messagelike GROUP BY mid) t_like
+					on message.mid = t_like.mid where message.qid = #{qid}  
+					<if test="pubtime==null">					
+					order by message.mtime DESC 
+					</if>
+					<if test="pubtime!=null">
+						<if test="type==1">
+						and message.mtime &gt;= STR_TO_DATE(#{pubtime},'%Y-%m-%d %H:%i:%s') order by message.mtime Desc
+						</if>
+						<if test="type==0">
+						and message.mtime &lt; STR_TO_DATE(#{pubtime},'%Y-%m-%d %H:%i:%s') order by message.mtime Desc
+						</if>
+					</if>
+					limit #{start},#{end}) t_temp1 ) t_temp2 LEFT JOIN
+					(select count(*) replynum,mid from messagereply GROUP BY mid)  t_reply 
+					on t_temp2.mid = t_reply.mid ) t_temp3 LEFT JOIN messageimg on t_temp3.mid = messageimg.mid	
+					<if test="type==null">
+						order by t_temp3.mtime DESC
+					</if>	
+					<if test="type==0">	
+					order by t_temp3.mtime DESC
+					</if>	
+					<if test="type==1">
+					order by t_temp3.mtime DESC
+					</if>
+					
+		</select>
+		
+	
+		<delete id="deleteMessageLikeByMid" parameterType="int">
+				delete from messagelike where messagelike.mid = #{mid}
+		</delete>
+		<delete id="deleteMessageReplyByMid"  parameterType="int">
+				delete from messagereply where messagereply.mid = #{mid}
+		</delete>
+		<delete id="deleteMessageImgByMid" parameterType="int">
+				delete from messageimg where messageimg.mid = #{mid}
+		</delete>
+		<delete id="deleteMessageByMid" parameterType="int">
+				delete from message where message.mid = #{mid}
+		</delete>
+		
+		<select id="getMessageImgs" parameterType="int"  resultType="com.neusoft.po.MessageImg">
+				select * from messageimg where messageimg.mid = #{mid}
+		</select>
+		
+		<delete id="deleteMessageReplyById" parameterType="int">
+				delete from messagereply where messagereply.id = #{id}
+		</delete>
+		
+		<select id="getTotalNumOfMessagesReplys" parameterType="int" resultType="int">
+				select count(*) from messagereply where messagereply.mid = #{mid}
+		</select>
+		
+		<select id="getMessageReplys" parameterType="Map" resultType="com.neusoft.po.MessageReply">
+				select * from messagereply where messagereply.mid=#{mid} 
+				<if test="type==1">
+				and messagereply.stime &gt;= STR_TO_DATE(#{pubtime},'%Y-%m-%d %H:%i:%s') 
+				</if>
+				<if test="type==0">
+				and messagereply.stime &lt; STR_TO_DATE(#{pubtime},'%Y-%m-%d %H:%i:%s') 
+				</if>
+				order by messagereply.stime desc 	limit #{start},#{end}
+		</select>
+		
+		<select id="getMessageLikes" parameterType="Map" resultType="com.neusoft.po.MessageLike">
+				select * from messagelike where messagelike.mid = #{mid} order by messagelike.stime desc limit #{start},#{end}
+		</select>
+		
+		<select id="getNumOfMessageLIkeByMidAndNickname" parameterType="Map" resultType="int">
+				select count(*) from messagelike where messagelike.mid =#{mid} and messagelike.nickname=#{nickname}
+		</select>
+		<insert id="addMessageLike" parameterType="Map">
+				insert into messagelike(mid,nickname,stime) values(#{mid},#{nickname},now())
+		</insert>
+		<delete id="deleteMessageLike" parameterType="Map">
+				delete from messagelike where messagelike.mid=#{mid} and messagelike.nickname=#{nickname}
+		</delete>
+		<insert id="addMessageReply" parameterType="com.neusoft.po.MessageReply">
+				insert into messagereply(mid,content,nickname,stime) values(#{mid},#{content},#{nickName},now())
+		</insert>
+</mapper>

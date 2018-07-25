@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.mapper.FreeListenBookMapper">
+	
+	<resultMap type="com.neusoft.po.FreeListenBook" id="freelistenbook_map">
+		<id property="id" column="id"/>
+		<result property="fid" column="fid"/>		
+		<result property="userName" column="username"/>
+		<result property="tel" column="tel"/>
+		<result property="status" column="status"/>
+		<result property="bookTime" column="booktime"/>
+		<result property="comment" column="comment"/>
+		<association property = "freelisten" javaType="com.neusoft.po.FreeListen">
+			<id property="id" column="fid"/>
+			<result property="title" column="title" jdbcType="VARCHAR" javaType="String"/>		
+			<result property="imgUrl" column="imgurl" jdbcType="VARCHAR" javaType="String"/>
+			<result property="fdesc" column="fdesc" jdbcType="VARCHAR" javaType="String"/>
+			<result property="status" column="listen_status" jdbcType="VARCHAR" javaType="String"/>
+			<result property="pubTime" column="pubtime" jdbcType="VARCHAR" javaType="String"/>
+			<result property="branchid" column="branchid" />
+			
+		</association>
+
+	</resultMap>
+	
+	
+	<!-- 前端 -->
+	<select id="getFreeListenBook" parameterType="map" resultMap="freelistenbook_map">
+		select form1.* FROM 
+			(
+			SELECT freelistenbook.*,freelisten.title,freelisten.imgurl,
+			freelisten.fdesc,freelisten.status as listen_status,
+			freelisten.pubtime,freelisten.branchid
+			FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid} and form1.tel= #{tel}
+			order by booktime desc
+			limit #{page.start},#{page.end}
+		
+			
+	</select>
+	
+	<select id="getFreeListenBookByStatus" parameterType="map" resultMap="freelistenbook_map">
+		select form1.* FROM 
+			(
+			SELECT freelistenbook.*,freelisten.title,freelisten.imgurl,
+			freelisten.fdesc,freelisten.status as listen_status,
+			freelisten.pubtime,freelisten.branchid
+			FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid} and form1.tel= #{tel}
+			<if test="status!=null and status!=''">
+				and status=#{status}</if>
+			order by booktime desc
+			limit #{page.start},#{page.end}
+	
+	</select>
+	
+	<update id="updateFreeListenBook" parameterType="map" >
+		update freelitenbook set status = #{status}
+		where id = #{id}
+	
+	</update>
+	<select id="getTotalNumOfFreeListenBooks" parameterType="map" resultType="int">
+		select count(*) FROM 
+			(
+			SELECT freelistenbook.*,freelisten.branchid FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where	qid=#{qid}
+			
+			<!-- 如果tel为空，查找所有 -->
+			
+			<if test="tel!=null and tel!=''">
+			and form1.tel= #{tel}
+			</if>
+			
+	</select>
+	<insert id="insertFreeListenBook" parameterType="com.neusoft.po.FreeListenBook" >
+		INSERT INTO freelistenbook(fid,tel,username,booktime,status,comment)
+		values(#{fid},#{tel},#{username},SYSDATE(),'待处理',#{comment})
+	</insert>
+	<select id="getTotalNumOfFreeListenBooksByStatus" parameterType="map" resultType="int">
+		select count(*) FROM 
+			(
+			SELECT freelistenbook.*,freelisten.branchid FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid} 
+			
+			<!-- 如果tel为空，查找所有 -->
+			<if test="tel!=null and tel!=''">
+			and form1.tel= #{tel}
+			</if>
+			<if test='status!=null and status!="" '>
+				and status=#{status}
+			</if>
+	
+	</select>
+	
+	<select id="getFreeListenBookBeyondTime" parameterType="map" resultMap="freelistenbook_map">
+		select form1.* FROM 
+			(
+			SELECT freelistenbook.*,freelisten.title,freelisten.imgurl,
+			freelisten.fdesc,freelisten.status as listen_status,
+			freelisten.pubtime,freelisten.branchid
+			FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid 
+			where qid=#{qid} and form1.tel= #{tel}
+			and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt; STR_TO_DATE(#{bookTime},'%Y-%c-%d')
+			<if test="status !=null and status!=''">	
+				and status=#{status}
+			</if>
+			order by booktime desc
+		
+			
+	</select>
+	
+	
+	
+	<!-- 后台 -->
+	<select id="findAllReservation" resultType="com.neusoft.po.FreeListenBook" >
+			select form1.* FROM 
+			(
+			SELECT freelistenbook.*,freelisten.branchid FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid}
+	</select>
+	
+	<!-- <select id="findReservationByCondition" 
+		resultType="com.neusoft.po.FreeListenBook"	parameterType="com.neusoft.vo.ReservationCondition">
+			select * from freelistenbook where 1=1
+			<if test="condition.fid!=null">
+			and #{condition.fid}=fid
+			</if>
+			<if test="condition.nickName!=null and condition.nickName!=''">
+			and userName like '%${condition.nickName}%'
+			</if>
+			<if test="condition.status!=null and condition.status!=''">
+			and status = #{condition.status}
+			</if>
+			<if test="condition.startDate!=null and condition.startDate!=''">
+			and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+			</if>
+			<if test="condition.endDate!=null and condition.endDate!=''">
+			and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+			</if>
+	
+	</select> -->
+	
+	<update id="dealReservation" parameterType="int">
+		update freelistenbook set status='已处理'
+		where id=#{id}
+	</update>
+
+	<select id="findReservationCountByCondition" 
+		parameterType="map" resultType="int">
+	
+		select count(*) FROM 
+			(
+			SELECT freelistenbook.*,freelisten.branchid FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid} 
+			
+			<if test="condition!=null">
+				<if test="condition.fid!=null">
+				and #{condition.fid}=fid
+				</if>
+				<if test="condition.nickName!=null and condition.nickName!=''">
+				and userName like '%${condition.nickName}%'
+				</if>
+				<if test="condition.status!=null and condition.status!=''">
+				and status = #{condition.status}
+				</if>
+				<if test="condition.startDate!=null and condition.startDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+				</if>
+				<if test="condition.endDate!=null and condition.endDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+				</if>
+			</if>
+		
+	</select>
+	
+	
+	
+	<select id="findPageByCondition" parameterType="map"
+		resultMap="freelistenbook_map">
+		
+		
+			select form1.* FROM 
+			(
+			SELECT freelistenbook.*,freelisten.title,freelisten.imgurl,
+			freelisten.fdesc,freelisten.status as listen_status,
+			freelisten.pubtime,freelisten.branchid
+			FROM `freelistenbook`
+			left JOIN freelisten 
+			on freelisten.id = freelistenbook.fid
+			) form1
+			 LEFT JOIN address
+			ON form1.branchid = address.aid
+			where qid=#{qid}
+			<if test="condition!=null">
+				<if test="condition.fid!=null">
+				and #{condition.fid}=fid
+				</if>
+				<if test="condition.nickName!=null and condition.nickName!=''">
+				and userName like '%${condition.nickName}%'
+				</if>
+				<if test="condition.status!=null and condition.status!=''">
+				and status = #{condition.status}
+				</if>
+				<if test="condition.startDate!=null and condition.startDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&gt;= STR_TO_DATE(#{condition.startDate},'%Y-%c-%d')
+				</if>
+				<if test="condition.endDate!=null and condition.endDate!=''">
+				and DATE_FORMAT(booktime, '%Y-%c-%d' )&lt;= STR_TO_DATE(#{condition.endDate},'%Y-%c-%d')			
+				</if>
+			</if>
+			limit #{page.start},#{page.end}
+	</select>
+</mapper>
+
